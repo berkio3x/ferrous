@@ -8,3 +8,12 @@ test('Test lexer token [ () ]', () => {
     expect(scanner.scanTokens()[0]).toMatchObject({ 'type': 0 });
 
 });
+
+test('Test lexer ignores comments', () => {
+
+    let scanner = new Scanner('( // this is a comment');
+    let tokens = scanner.scanTokens();
+    expect(scanner.scanTokens()).toHaveLength(1);
+
+
+});
