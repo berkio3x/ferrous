@@ -1,4 +1,3 @@
-
 enum TokenTypes {                                   
     // Single-character tokens.                      
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
@@ -11,7 +10,7 @@ enum TokenTypes {
     LESS, LESS_EQUAL,                                
     
     // Literals.                                     
-    IDENTIFIER, STRING, NUMBER,                      
+    IDENTIFIER, STRING, NUMBER,
     
     // Keywords.                                     
     AND, CLASS, ELSE, FALSE, FUN, FOR, IF, NIL, OR,  
@@ -19,7 +18,6 @@ enum TokenTypes {
     
     EOF                                        
 }
-
 
 class Token{
     type: string;
@@ -97,7 +95,7 @@ class Scanner {
                 break;
 
             }
-            case '<' :{
+            case '<': {
                 if (this.peek() === '='){
                     this.addToken(TokenTypes.LESS_EQUAL);
                     this.advance()
@@ -106,7 +104,7 @@ class Scanner {
                     this.addToken(TokenTypes.LESS)
                 break;
             }
-            case '>' :{
+            case '>': {
                 if (this.peek() === '='){
                     this.addToken(TokenTypes.GREATER_EQUAL)
                     this.advance();
@@ -114,6 +112,27 @@ class Scanner {
                 else
                     this.addToken(TokenTypes.GREATER)
             }
+
+            case '/': {
+                if (this.peek() === '/'){
+                    //its a comment , consume until exhausted
+                    while(this.peek() && this.peek() != "\n") this.advance()
+                }
+                else
+                    this.addToken(TokenTypes.SLASH);
+                break;
+            }
+
+            case ' ':                                    
+            case '\r':                                   
+            case '\t':                                   
+                // Ignore whitespace.                      
+                break;
+
+            case '\n':                                   
+                this.line++;                                    
+                break;      
+
             default:
                 {
                 error(this.line, "Unexpected character encountered.");
@@ -132,7 +151,6 @@ class Scanner {
     
     }
 }
-
 
 function report(line: number, where: string, message: string){
     console.log(`[ ${line}]: ${message}`);
@@ -155,4 +173,4 @@ function run(){
 
 }
 
-run()
+export default Scanner;
