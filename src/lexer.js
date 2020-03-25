@@ -66,8 +66,8 @@ class Scanner {
         this.current = this.current + 1;
         return this.source[this.current - 1];
     }
-    addToken(type) {
-        let token = new Token(type, null, null);
+    addToken(type, value) {
+        let token = new Token(type, value, null);
         this.tokens.push(token);
     }
     peek() {
@@ -153,6 +153,20 @@ class Scanner {
                 else
                     this.addToken(TokenTypes.SLASH);
                 break;
+            }
+            case '"': {
+                while (this.peek() && this.peek() != '"') {
+                    if (this.peek() == '\n')
+                        this.line++;
+                    this.advance();
+                }
+                if (this.endOfSource()) {
+                    error(this.line, "Unterminated String.");
+                    return;
+                }
+                this.advance();
+                let value = this.source.substring(this.start + 1, this.current - 1);
+                this.addToken(TokenTypes.STRING, value);
             }
             case ' ':
             case '\r':
