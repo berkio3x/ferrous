@@ -76,6 +76,12 @@ class Scanner {
     isNumber(c) {
         return (c >= '0' && c <= '9');
     }
+    isAlpha(c) {
+        return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
+    }
+    isAlphaNumeric(c) {
+        return (this.isNumber(c) || this.isAlpha(c));
+    }
     scanToken() {
         let c = this.advance();
         switch (c) {
@@ -195,6 +201,15 @@ class Scanner {
                     }
                     let value = this.source.substring(this.start, this.current);
                     this.addToken(TokenTypes.NUMBER, value);
+                }
+                if (this.isAlpha(c)) {
+                    //identifiers
+                    this.advance();
+                    while (this.peek() && this.isAlphaNumeric(this.peek())) {
+                        this.advance();
+                    }
+                    let value = this.source.substring(this.start, this.current);
+                    this.addToken(TokenTypes.IDENTIFIER, value);
                 }
                 else {
                     error(this.line, "Unexpected character encountered.");

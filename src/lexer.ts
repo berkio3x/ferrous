@@ -22,6 +22,7 @@ enum TokenTypes {
     EOF                                        
 }
 
+
 class Token{
     type: string;
     lexeme: string;
@@ -70,6 +71,13 @@ class Scanner {
 
     }
 
+    isAlpha(c): boolean {
+        return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')
+    }
+
+    isAlphaNumeric(c): boolean {
+        return (this.isNumber(c) || this.isAlpha(c))
+    }
     scanToken(){
         let c: string = this.advance();
         switch(c){
@@ -174,6 +182,17 @@ class Scanner {
                     let value: string = this.source.substring(this.start , this.current)
                     this.addToken(TokenTypes.NUMBER, value)
 
+                }
+                if (this.isAlpha(c)){
+                    //identifiers
+
+                    this.advance()
+
+                    while(this.peek() && this.isAlphaNumeric(this.peek())){
+                        this.advance()
+                    }
+                    let value: string = this.source.substring(this.start, this.current)
+                    this.addToken(TokenTypes.IDENTIFIER, value)
                 }
                 else
                 {

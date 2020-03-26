@@ -40,3 +40,28 @@ test('Test LEXER Number', () => {
     expect(scanner.scanTokens()[0]).toMatchObject({ 'lexeme': "99.88" });
 
 });
+
+test('Test LEXER Identifier', () => {
+    let scanner = new Scanner('userName');
+    let tokens = scanner.scanTokens();
+    expect(scanner.scanTokens()[0]).toMatchObject({ 'lexeme': "userName", 'type': 19 });
+
+
+});
+
+
+test('Test LEXER Identifier starts with underscore', () => {
+    let scanner = new Scanner('_userName');
+    let tokens = scanner.scanTokens();
+    expect(scanner.scanTokens()[0]).toMatchObject({ 'lexeme': "_userName", 'type': 19 });
+
+
+});
+
+test('Test LEXER Identifier contains number', () => {
+    let scanner = new Scanner('userName22');
+    let tokens = scanner.scanTokens();
+    expect(scanner.scanTokens()[0]).toMatchObject({ 'lexeme': "userName22", 'type': 19 });
+
+
+});
