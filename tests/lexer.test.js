@@ -49,7 +49,6 @@ test('Test LEXER Identifier', () => {
 
 });
 
-
 test('Test LEXER Identifier starts with underscore', () => {
     let scanner = new Scanner('_userName');
     let tokens = scanner.scanTokens();
@@ -62,6 +61,14 @@ test('Test LEXER Identifier contains number', () => {
     let scanner = new Scanner('userName22');
     let tokens = scanner.scanTokens();
     expect(scanner.scanTokens()[0]).toMatchObject({ 'lexeme': "userName22", 'type': 19 });
+
+
+});
+
+test('Test LEXER reserved keywords', () => {
+    let scanner = new Scanner('and');
+    let tokens = scanner.scanTokens();
+    expect(scanner.scanTokens()[0]).toMatchObject({ 'lexeme': "and", 'type': 22 });
 
 
 });

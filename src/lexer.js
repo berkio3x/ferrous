@@ -44,6 +44,24 @@ var TokenTypes;
     TokenTypes[TokenTypes["WHILE"] = 37] = "WHILE";
     TokenTypes[TokenTypes["EOF"] = 38] = "EOF";
 })(TokenTypes || (TokenTypes = {}));
+let Keywords = {
+    "and": TokenTypes.AND,
+    "class": TokenTypes.CLASS,
+    "else": TokenTypes.ELSE,
+    "false": TokenTypes.FALSE,
+    "for": TokenTypes.FOR,
+    "fun": TokenTypes.FUN,
+    "if": TokenTypes.IF,
+    "nil": TokenTypes.NIL,
+    "or": TokenTypes.OR,
+    "print": TokenTypes.PRINT,
+    "return": TokenTypes.RETURN,
+    "super": TokenTypes.SUPER,
+    "this": TokenTypes.THIS,
+    "true": TokenTypes.TRUE,
+    "var": TokenTypes.VAR,
+    "while": TokenTypes.WHILE
+};
 class Token {
     constructor(type, lexeme, line) {
         this.type = type;
@@ -209,7 +227,10 @@ class Scanner {
                         this.advance();
                     }
                     let value = this.source.substring(this.start, this.current);
-                    this.addToken(TokenTypes.IDENTIFIER, value);
+                    if (Keywords[value])
+                        this.addToken(Keywords[value], value);
+                    else
+                        this.addToken(TokenTypes.IDENTIFIER, value);
                 }
                 else {
                     error(this.line, "Unexpected character encountered.");
