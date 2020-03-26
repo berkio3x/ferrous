@@ -1,3 +1,6 @@
+import { setFlagsFromString } from "v8";
+import { isNumber } from "util";
+
 enum TokenTypes {                                   
     // Single-character tokens.                      
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
@@ -60,6 +63,11 @@ class Scanner {
 
     peek(): string  {
         return this.source[this.current]; 
+    }
+
+    isNumber(c): boolean {
+        return (c >= '0' && c <= '9')
+
     }
 
     scanToken(){
@@ -132,11 +140,12 @@ class Scanner {
                     error(this.line, "Unterminated String.");
                     return
                 }
+
+                //consume the last Quote '"'
                 this.advance()
                 let value: string = this.source.substring(this.start+1, this.current-1); 
                 this.addToken(TokenTypes.STRING, value)
             }
-
             case ' ':                                    
             case '\r':                                   
             case '\t':                                   
@@ -146,8 +155,27 @@ class Scanner {
             case '\n':                                   
                 this.line++;                                    
                 break;      
-
             default:
+
+                if (this.isNumber(c)){
+                    // 99.0
+                    // 99
+
+                    while((this.peek() && this.isNumber(this.peek()))) {
+                        this.advance()
+
+                    }
+                    if (this.peek() === "."){
+                        this.advance()
+                        while(this.peek() && this.isNumber(this.peek())){
+                            this.advance()
+                        }
+                    }
+                    let value: string = this.source.substring(this.start , this.current)
+                    this.addToken(TokenTypes.NUMBER, value)
+
+                }
+                else
                 {
                 error(this.line, "Unexpected character encountered.");
                 break;

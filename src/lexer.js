@@ -73,6 +73,9 @@ class Scanner {
     peek() {
         return this.source[this.current];
     }
+    isNumber(c) {
+        return (c >= '0' && c <= '9');
+    }
     scanToken() {
         let c = this.advance();
         switch (c) {
@@ -164,6 +167,7 @@ class Scanner {
                     error(this.line, "Unterminated String.");
                     return;
                 }
+                //consume the last Quote '"'
                 this.advance();
                 let value = this.source.substring(this.start + 1, this.current - 1);
                 this.addToken(TokenTypes.STRING, value);
@@ -177,7 +181,22 @@ class Scanner {
                 this.line++;
                 break;
             default:
-                {
+                if (this.isNumber(c)) {
+                    // 99.0
+                    // 99
+                    while ((this.peek() && this.isNumber(this.peek()))) {
+                        this.advance();
+                    }
+                    if (this.peek() === ".") {
+                        this.advance();
+                        while (this.peek() && this.isNumber(this.peek())) {
+                            this.advance();
+                        }
+                    }
+                    let value = this.source.substring(this.start, this.current);
+                    this.addToken(TokenTypes.NUMBER, value);
+                }
+                else {
                     error(this.line, "Unexpected character encountered.");
                     break;
                 }
@@ -205,3 +224,4 @@ function run() {
     });
 }
 export default Scanner;
+//# sourceMappingURL=lexer.js.map
