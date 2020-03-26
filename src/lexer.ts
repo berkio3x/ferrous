@@ -1,6 +1,3 @@
-import { setFlagsFromString } from "v8";
-import { isNumber } from "util";
-
 enum TokenTypes {                                   
     // Single-character tokens.                      
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
@@ -21,7 +18,6 @@ enum TokenTypes {
     
     EOF                                        
 }
-
 
 let Keywords = {
     "and":  TokenTypes.AND,                       
@@ -258,4 +254,4 @@ function run(){
 
 }
 
-export default Scanner;
+export  {Scanner, TokenTypes};
