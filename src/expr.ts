@@ -1,4 +1,4 @@
-abstract class Expr{}
+
         
 
 /* 
@@ -90,3 +90,9 @@ class Unary implements Expr {
 
 }
 
+export {
+Binary,
+Grouping,
+Literal,
+Unary,
+}

@@ -75,6 +75,14 @@ var Expressions = [
 function defineIntro(fd) {
     fs.appendFileSync(fd, "\n        \n\n/* \nThis is an auto generated file by using utils/exprGen.ts utility cli program of Ferrous.\n(\u3063\u25D4\u25E1\u25D4)\u3063 \u2665 ast \u2665\n*/\n        \n\n\n");
 }
+function defineExports(fd, types) {
+    fs.appendFileSync(fd, 'export {\n');
+    types.forEach(function (type) {
+        var classNameToExport = type.split('=>')[0].replace(" ", "");
+        fs.appendFileSync(fd, classNameToExport + ",\n");
+    });
+    fs.appendFileSync(fd, "}");
+}
 function defineVisitor(fd, className, types) {
     fs.appendFileSync(fd, "interface Visitor {\n\n");
     types.forEach(function (type) {
@@ -130,6 +138,7 @@ function GenerateAst(outputDir, baseClassName) {
             var attrs = item.split('=>')[1].split(',');
             defineType(fd, className, baseClassName, attrs);
         });
+        defineExports(fd, Expressions);
     }
     else {
         fs.closeSync(fd);

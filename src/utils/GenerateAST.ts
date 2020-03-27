@@ -89,6 +89,17 @@ This is an auto generated file by using utils/exprGen.ts utility cli program of 
 }
 
 
+function defineExports(fd:any, types: Array<string>){
+    fs.appendFileSync(fd, 'export {\n')
+    types.forEach((type)=>{
+        let  classNameToExport = type.split('=>')[0].replace(" ","")
+        fs.appendFileSync(fd,`  ${classNameToExport},\n`)
+
+    })
+    fs.appendFileSync(fd, `}`)
+
+}
+
 function defineVisitor(fd: any , className:string, types: Array<string>) {
     fs.appendFileSync(fd, `interface Visitor {\n\n`)
     types.forEach((type)=>{
@@ -169,6 +180,7 @@ function GenerateAst(outputDir: string, baseClassName: string){
             defineType(fd, className, baseClassName, attrs)
 
         })
+        defineExports(fd, Expressions)
     }
     else{
         fs.closeSync(fd);
