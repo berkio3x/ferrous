@@ -72,8 +72,8 @@ var Expressions = [
     "Literal=> Value:Object",
     "Unary=> operator:TokenTypes, right: Expr"
 ];
-function defineInto(fd) {
-    fs.appendFileSync(fd, "\n        \n\n/* \nThis is an auto generated file by using utils/exprGen.ts utility cli program of Ferrous.\n(\u3063\u25D4\u25E1\u25D4)\u3063 \u2665 ast \u2665\n*/\n        \n\n\n        ");
+function defineIntro(fd) {
+    fs.appendFileSync(fd, "\n        \n\n/* \nThis is an auto generated file by using utils/exprGen.ts utility cli program of Ferrous.\n(\u3063\u25D4\u25E1\u25D4)\u3063 \u2665 ast \u2665\n*/\n        \n\n\n");
 }
 function defineVisitor(fd, className, types) {
     fs.appendFileSync(fd, "interface Visitor {\n\n");
@@ -109,7 +109,7 @@ function GenerateAst(outputDir, baseClassName) {
     var error = null;
     try {
         var fd = fs.openSync(fileName, 'a');
-        defineInto(fd);
+        defineIntro(fd);
         fs.appendFileSync(fd, "abstract class " + baseClassName + "{}", 'utf8');
         fs.appendFileSync(fd, '\n');
     }

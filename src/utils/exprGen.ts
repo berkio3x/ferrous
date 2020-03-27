@@ -76,7 +76,7 @@ let Expressions:Array<string> = [
     "Unary=> operator:TokenTypes, right: Expr"
 ]
 
-function defineInto(fd:any){
+function defineIntro(fd:any){
     fs.appendFileSync(fd, 
         `
         \n
@@ -85,7 +85,7 @@ This is an auto generated file by using utils/exprGen.ts utility cli program of 
 (っ◔◡◔)っ ♥ ast ♥
 */
         \n\n
-        `)
+`)
 
 }
 
@@ -144,7 +144,7 @@ function GenerateAst(outputDir: string, baseClassName: string){
 
     try{
         var fd = fs.openSync(fileName, 'a')
-        defineInto(fd)
+        defineIntro(fd)
         fs.appendFileSync(fd,`abstract class ${baseClassName}{}`, 'utf8')
         fs.appendFileSync(fd, '\n')
     }catch(err){

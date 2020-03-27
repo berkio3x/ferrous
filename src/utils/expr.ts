@@ -8,7 +8,7 @@ This is an auto generated file by using utils/exprGen.ts utility cli program of 
         
 
 
-        abstract class Expr{}
+abstract class Expr{}
 interface Visitor {
 
     visitBinaryExpr (vs: Binary ):any ;
