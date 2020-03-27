@@ -83,14 +83,14 @@ function defineVisitor(fd, className, types) {
     });
     fs.appendFileSync(fd, '}\n\n');
 }
-function defineType(fd, className, attributes) {
+function defineType(fd, className, baseClassName, attributes) {
     console.log(fd);
-    fs.appendFileSync(fd, "class " + className + " Extends Expr {\n", 'utf8');
+    fs.appendFileSync(fd, "class " + className + " implements Expr {\n", 'utf8');
     fs.appendFileSync(fd, '\n');
     attributes.forEach(function (attr) {
         var attrName = attr.split(':')[0];
         var type = attr.split(':')[1];
-        fs.appendFileSync(fd, "    " + attrName + ": " + type, 'utf8');
+        fs.appendFileSync(fd, "    " + attrName + ": " + type + ";", 'utf8');
         fs.appendFileSync(fd, '\n');
     });
     fs.appendFileSync(fd, '\n');
@@ -99,9 +99,13 @@ function defineType(fd, className, attributes) {
     attributes.forEach(function (attr) {
         var attrName = attr.split(':')[0].replace(' ', '');
         var type = attr.split(':')[1];
-        fs.appendFileSync(fd, "\t\tthis." + attrName + " = " + attrName + "\n");
+        fs.appendFileSync(fd, "\t\tthis." + attrName + " = " + attrName + ";\n");
     });
-    fs.appendFileSync(fd, "\n    }\n");
+    fs.appendFileSync(fd, "\n    }\n\n");
+    //define accept method of the concrete class implementations
+    fs.appendFileSync(fd, "    accept(vv: Visitor) {\n");
+    fs.appendFileSync(fd, "        vv.visit" + className + baseClassName + "(this);\n");
+    fs.appendFileSync(fd, "    }\n");
     fs.appendFileSync(fd, "\n}\n\n");
 }
 function GenerateAst(outputDir, baseClassName) {
@@ -110,8 +114,9 @@ function GenerateAst(outputDir, baseClassName) {
     try {
         var fd = fs.openSync(fileName, 'a');
         defineIntro(fd);
-        fs.appendFileSync(fd, "abstract class " + baseClassName + "{}", 'utf8');
-        fs.appendFileSync(fd, '\n');
+        fs.appendFileSync(fd, "interface " + baseClassName + "{\n\n", 'utf8');
+        fs.appendFileSync(fd, "    accept(vv: Visitor): any;\n");
+        fs.appendFileSync(fd, '}\n');
     }
     catch (err) {
         error = error;
@@ -123,7 +128,7 @@ function GenerateAst(outputDir, baseClassName) {
         Expressions.forEach(function (item) {
             var className = item.split('=>')[0];
             var attrs = item.split('=>')[1].split(',');
-            defineType(fd, className, attrs);
+            defineType(fd, className, baseClassName, attrs);
         });
     }
     else {

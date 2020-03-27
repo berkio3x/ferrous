@@ -8,7 +8,10 @@ This is an auto generated file by using utils/exprGen.ts utility cli program of 
         
 
 
-abstract class Expr{}
+interface Expr{
+
+    accept(vv: Visitor): any;
+}
 interface Visitor {
 
     visitBinaryExpr (vs: Binary ):any ;
@@ -17,56 +20,72 @@ interface Visitor {
     visitUnaryExpr (vs: Unary ):any ;
 }
 
-class Binary Extends Expr {
+class Binary implements Expr {
 
-     left: Expr 
-     operator: TokenTypes
-     right: Expr
+     left: Expr ;
+     operator: TokenTypes;
+     right: Expr;
 
     constructor( left:Expr , operator:TokenTypes, right:Expr){
 
-		this.left = left
-		this.operator = operator
-		this.right = right
+		this.left = left;
+		this.operator = operator;
+		this.right = right;
 
+    }
+
+    accept(vv: Visitor) {
+        vv.visitBinaryExpr(this);
     }
 
 }
 
-class Grouping Extends Expr {
+class Grouping implements Expr {
 
-     expression: Expr
+     expression: Expr;
 
     constructor( expression:Expr){
 
-		this.expression = expression
+		this.expression = expression;
 
+    }
+
+    accept(vv: Visitor) {
+        vv.visitGroupingExpr(this);
     }
 
 }
 
-class Literal Extends Expr {
+class Literal implements Expr {
 
-     Value: Object
+     Value: Object;
 
     constructor( Value:Object){
 
-		this.Value = Value
+		this.Value = Value;
 
+    }
+
+    accept(vv: Visitor) {
+        vv.visitLiteralExpr(this);
     }
 
 }
 
-class Unary Extends Expr {
+class Unary implements Expr {
 
-     operator: TokenTypes
-     right:  Expr
+     operator: TokenTypes;
+     right:  Expr;
 
     constructor( operator:TokenTypes, right: Expr){
 
-		this.operator = operator
-		this.right = right
+		this.operator = operator;
+		this.right = right;
 
+    }
+
+    accept(vv: Visitor) {
+        vv.visitUnaryExpr(this);
     }
 
 }

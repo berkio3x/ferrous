@@ -66,7 +66,6 @@ class prettyPrinter implements Visitor{
 
 */
 
-
 var fs = require('fs')
 
 let Expressions:Array<string> = [
@@ -103,11 +102,11 @@ function defineVisitor(fd: any , className:string, types: Array<string>) {
 
 
 
-function defineType(fd: any, className:string, attributes: Array<string>){
+function defineType(fd: any, className:string,baseClassName: string, attributes: Array<string>){
 
         console.log(fd)
         
-        fs.appendFileSync(fd, `class ${className} Extends Expr {\n`, 'utf8')
+        fs.appendFileSync(fd, `class ${className} implements Expr {\n`, 'utf8')
         fs.appendFileSync(fd, '\n')
        
 
@@ -115,7 +114,7 @@ function defineType(fd: any, className:string, attributes: Array<string>){
             var attrName = attr.split(':')[0]
             var type = attr.split(':')[1]
 
-            fs.appendFileSync(fd, `    ${attrName}: ${type}`, 'utf8')
+            fs.appendFileSync(fd, `    ${attrName}: ${type};`, 'utf8')
             fs.appendFileSync(fd, '\n')
         })
 
@@ -127,11 +126,16 @@ function defineType(fd: any, className:string, attributes: Array<string>){
         attributes.forEach((attr)=>{
             var attrName = attr.split(':')[0].replace(' ','')
             var type = attr.split(':')[1]
-            fs.appendFileSync(fd, `\t\tthis.${attrName} = ${attrName}\n`)
+            fs.appendFileSync(fd, `\t\tthis.${attrName} = ${attrName};\n`)
            
         })
 
-        fs.appendFileSync(fd, `\n    }\n`)
+        fs.appendFileSync(fd, `\n    }\n\n`)
+
+        //define accept method of the concrete class implementations
+        fs.appendFileSync(fd,`    accept(vv: Visitor) {\n`)
+        fs.appendFileSync(fd,`        vv.visit${className}${baseClassName}(this);\n`)
+        fs.appendFileSync(fd,`    }\n`)
         fs.appendFileSync(fd,`\n}\n\n`)
 
 }
@@ -145,8 +149,9 @@ function GenerateAst(outputDir: string, baseClassName: string){
     try{
         var fd = fs.openSync(fileName, 'a')
         defineIntro(fd)
-        fs.appendFileSync(fd,`abstract class ${baseClassName}{}`, 'utf8')
-        fs.appendFileSync(fd, '\n')
+        fs.appendFileSync(fd,`interface ${baseClassName}{\n\n`, 'utf8')
+        fs.appendFileSync(fd,`    accept(vv: Visitor): any;\n`)
+        fs.appendFileSync(fd, '}\n')
     }catch(err){
         error = error
         console.error('Error while writing to file')
@@ -161,7 +166,7 @@ function GenerateAst(outputDir: string, baseClassName: string){
             var className  = item.split('=>')[0]
             var attrs  = item.split('=>')[1].split(',')
 
-            defineType(fd, className, attrs)
+            defineType(fd, className, baseClassName, attrs)
 
         })
     }
