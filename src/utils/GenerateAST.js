@@ -79,7 +79,7 @@ function defineExports(fd, types) {
     fs.appendFileSync(fd, 'export {\n');
     types.forEach(function (type) {
         var classNameToExport = type.split('=>')[0].replace(" ", "");
-        fs.appendFileSync(fd, classNameToExport + ",\n");
+        fs.appendFileSync(fd, "  " + classNameToExport + ",\n");
     });
     fs.appendFileSync(fd, "}");
 }
@@ -122,6 +122,7 @@ function GenerateAst(outputDir, baseClassName) {
     try {
         var fd = fs.openSync(fileName, 'a');
         defineIntro(fd);
+        fs.appendFileSync(fd, "import {TokenTypes} from './lexer';\n\n");
         fs.appendFileSync(fd, "interface " + baseClassName + "{\n\n", 'utf8');
         fs.appendFileSync(fd, "    accept(vv: Visitor): any;\n");
         fs.appendFileSync(fd, '}\n');

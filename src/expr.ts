@@ -8,6 +8,8 @@ This is an auto generated file by using utils/exprGen.ts utility cli program of 
         
 
 
+import {TokenTypes} from './lexer';
+
 interface Expr{
 
     accept(vv: Visitor): any;
@@ -91,8 +93,8 @@ class Unary implements Expr {
 }
 
 export {
-Binary,
-Grouping,
-Literal,
-Unary,
+  Binary,
+  Grouping,
+  Literal,
+  Unary,
 }

@@ -88,7 +88,6 @@ This is an auto generated file by using utils/exprGen.ts utility cli program of 
 
 }
 
-
 function defineExports(fd:any, types: Array<string>){
     fs.appendFileSync(fd, 'export {\n')
     types.forEach((type)=>{
@@ -160,6 +159,7 @@ function GenerateAst(outputDir: string, baseClassName: string){
     try{
         var fd = fs.openSync(fileName, 'a')
         defineIntro(fd)
+        fs.appendFileSync(fd, `import {TokenTypes} from './lexer';\n\n`)
         fs.appendFileSync(fd,`interface ${baseClassName}{\n\n`, 'utf8')
         fs.appendFileSync(fd,`    accept(vv: Visitor): any;\n`)
         fs.appendFileSync(fd, '}\n')
