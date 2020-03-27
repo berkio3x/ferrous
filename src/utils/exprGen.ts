@@ -77,9 +77,19 @@ let Expressions:Array<string> = [
 ]
 
 function defineInto(fd:any){
-    fs.appendFileSync(fd, `\n\n/* This is an auto generated file by using utils/exprGen.ts utility cli program */\n\n\n`)
+    fs.appendFileSync(fd, 
+        `
+        \n
+/* 
+This is an auto generated file by using utils/exprGen.ts utility cli program of Ferrous.
+(っ◔◡◔)っ ♥ ast ♥
+*/
+        \n\n
+        `)
 
 }
+
+
 function defineVisitor(fd: any , className:string, types: Array<string>) {
     fs.appendFileSync(fd, `interface Visitor {\n\n`)
     types.forEach((type)=>{
@@ -89,6 +99,8 @@ function defineVisitor(fd: any , className:string, types: Array<string>) {
     fs.appendFileSync(fd,'}\n\n')
 
 }
+
+
 
 
 function defineType(fd: any, className:string, attributes: Array<string>){

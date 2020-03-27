@@ -73,7 +73,7 @@ var Expressions = [
     "Unary=> operator:TokenTypes, right: Expr"
 ];
 function defineInto(fd) {
-    fs.appendFileSync(fd, "\n\n/* This is an auto generated file by using utils/exprGen.ts utility cli program */\n\n\n");
+    fs.appendFileSync(fd, "\n        \n\n/* \nThis is an auto generated file by using utils/exprGen.ts utility cli program of Ferrous.\n(\u3063\u25D4\u25E1\u25D4)\u3063 \u2665 ast \u2665\n*/\n        \n\n\n        ");
 }
 function defineVisitor(fd, className, types) {
     fs.appendFileSync(fd, "interface Visitor {\n\n");

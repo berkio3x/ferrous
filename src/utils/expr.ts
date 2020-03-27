@@ -1,9 +1,14 @@
 
+        
 
-/* This is an auto generated file by using utils/exprGen.ts utility cli program */
+/* 
+This is an auto generated file by using utils/exprGen.ts utility cli program of Ferrous.
+(っ◔◡◔)っ ♥ ast ♥
+*/
+        
 
 
-abstract class Expr{}
+        abstract class Expr{}
 interface Visitor {
 
     visitBinaryExpr (vs: Binary ):any ;
