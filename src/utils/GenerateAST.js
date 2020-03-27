@@ -109,7 +109,7 @@ function defineType(fd, className, baseClassName, attributes) {
     fs.appendFileSync(fd, "\n}\n\n");
 }
 function GenerateAst(outputDir, baseClassName) {
-    var fileName = outputDir + "/expr.ts";
+    var fileName = outputDir + "/" + baseClassName + ".ts";
     var error = null;
     try {
         var fd = fs.openSync(fileName, 'a');

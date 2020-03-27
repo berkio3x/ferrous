@@ -143,7 +143,7 @@ function defineType(fd: any, className:string,baseClassName: string, attributes:
 
 function GenerateAst(outputDir: string, baseClassName: string){
 
-    let fileName = `${outputDir}/expr.ts`
+    let fileName = `${outputDir}/${baseClassName}.ts`
     let error = null;
 
     try{
