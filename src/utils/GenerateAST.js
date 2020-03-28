@@ -70,7 +70,7 @@ var Expressions = [
     "Binary=> left:Expr , operator:Token, right:Expr",
     "Grouping=> expression:Expr",
     "Literal=> Value:Object",
-    "Unary=> operator:TokenTypes, right: Expr"
+    "Unary=> operator:Token, right: Expr"
 ];
 function defineIntro(fd) {
     fs.appendFileSync(fd, "\n        \n\n/* \nThis is an auto generated file by using utils/exprGen.ts utility cli program of Ferrous.\n(\u3063\u25D4\u25E1\u25D4)\u3063 \u2665 ast \u2665\n*/\n        \n\n\n");
@@ -94,7 +94,6 @@ function defineVisitor(fd, className, types) {
     fs.appendFileSync(fd, '}\n\n');
 }
 function defineType(fd, className, baseClassName, attributes) {
-    console.log(fd);
     fs.appendFileSync(fd, "class " + className + " implements Expr {\n", 'utf8');
     fs.appendFileSync(fd, '\n');
     attributes.forEach(function (attr) {
@@ -124,7 +123,7 @@ function GenerateAst(outputDir, baseClassName) {
     try {
         var fd = fs.openSync(fileName, 'a');
         defineIntro(fd);
-        fs.appendFileSync(fd, "import {TokenTypes} from './lexer';\n\n");
+        fs.appendFileSync(fd, "import {Token} from './lexer';\n\n");
         fs.appendFileSync(fd, "interface " + baseClassName + "{\n\n", 'utf8');
         fs.appendFileSync(fd, "    accept(vv: Visitor): any;\n");
         fs.appendFileSync(fd, '}\n');

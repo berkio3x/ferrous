@@ -72,7 +72,7 @@ let Expressions:Array<string> = [
     "Binary=> left:Expr , operator:Token, right:Expr",
     "Grouping=> expression:Expr",
     "Literal=> Value:Object",
-    "Unary=> operator:TokenTypes, right: Expr"
+    "Unary=> operator:Token, right: Expr"
 ]
 
 function defineIntro(fd:any){
@@ -116,7 +116,6 @@ function defineVisitor(fd: any , className:string, types: Array<string>) {
 
 function defineType(fd: any, className:string,baseClassName: string, attributes: Array<string>){
 
-        console.log(fd)
         
         fs.appendFileSync(fd, `class ${className} implements Expr {\n`, 'utf8')
         fs.appendFileSync(fd, '\n')
@@ -161,7 +160,7 @@ function GenerateAst(outputDir: string, baseClassName: string){
     try{
         var fd = fs.openSync(fileName, 'a')
         defineIntro(fd)
-        fs.appendFileSync(fd, `import {TokenTypes} from './lexer';\n\n`)
+        fs.appendFileSync(fd, `import {Token} from './lexer';\n\n`)
         fs.appendFileSync(fd,`interface ${baseClassName}{\n\n`, 'utf8')
         fs.appendFileSync(fd,`    accept(vv: Visitor): any;\n`)
         fs.appendFileSync(fd, '}\n')

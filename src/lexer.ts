@@ -254,4 +254,4 @@ function run(){
 
 }
 
-export  {Scanner, TokenTypes};
+export  {Scanner, Token};

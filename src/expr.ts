@@ -8,7 +8,7 @@ This is an auto generated file by using utils/exprGen.ts utility cli program of 
         
 
 
-import {TokenTypes} from './lexer';
+import {Token} from './lexer';
 
 interface Expr{
 
@@ -76,10 +76,10 @@ class Literal implements Expr {
 
 class Unary implements Expr {
 
-     operator: TokenTypes;
+     operator: Token;
      right:  Expr;
 
-    constructor( operator:TokenTypes, right: Expr){
+    constructor( operator:Token, right: Expr){
 
 		this.operator = operator;
 		this.right = right;
