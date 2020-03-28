@@ -1,13 +1,18 @@
 {   
-    "exclude":[
-        "./**/*.js"
-    ],
-    "include": ["src"],
+    
     "compilerOptions": {
         "sourceMap": true,
-        "lib": ["ESNext"],
-        "target": "ESNext",
+        // "lib": ["ESNext"],
+        // "target": "ESNext",
         "moduleResolution": "node"
-    }
-      
+    },
+
+    "include": [
+        "src/**/*"
+    ],
+
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
 }

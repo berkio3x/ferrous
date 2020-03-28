@@ -37,7 +37,7 @@ class Binary implements Expr {
     }
 
     accept(vv: Visitor) {
-        vv.visitBinaryExpr(this);
+        return vv.visitBinaryExpr(this);
     }
 
 }
@@ -53,7 +53,7 @@ class Grouping implements Expr {
     }
 
     accept(vv: Visitor) {
-        vv.visitGroupingExpr(this);
+        return vv.visitGroupingExpr(this);
     }
 
 }
@@ -69,7 +69,7 @@ class Literal implements Expr {
     }
 
     accept(vv: Visitor) {
-        vv.visitLiteralExpr(this);
+        return vv.visitLiteralExpr(this);
     }
 
 }
@@ -87,7 +87,7 @@ class Unary implements Expr {
     }
 
     accept(vv: Visitor) {
-        vv.visitUnaryExpr(this);
+        return vv.visitUnaryExpr(this);
     }
 
 }

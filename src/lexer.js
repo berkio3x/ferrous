@@ -1,3 +1,5 @@
+"use strict";
+exports.__esModule = true;
 var TokenTypes;
 (function (TokenTypes) {
     // Single-character tokens.                      
@@ -44,7 +46,8 @@ var TokenTypes;
     TokenTypes[TokenTypes["WHILE"] = 37] = "WHILE";
     TokenTypes[TokenTypes["EOF"] = 38] = "EOF";
 })(TokenTypes || (TokenTypes = {}));
-let Keywords = {
+exports.TokenTypes = TokenTypes;
+var Keywords = {
     "and": TokenTypes.AND,
     "class": TokenTypes.CLASS,
     "else": TokenTypes.ELSE,
@@ -62,46 +65,48 @@ let Keywords = {
     "var": TokenTypes.VAR,
     "while": TokenTypes.WHILE
 };
-class Token {
-    constructor(type, lexeme, line) {
+var Token = /** @class */ (function () {
+    function Token(type, lexeme, line) {
         this.type = type;
         this.lexeme = lexeme;
         this.line = line;
     }
-}
-class Scanner {
-    constructor(source) {
+    return Token;
+}());
+exports.Token = Token;
+var Scanner = /** @class */ (function () {
+    function Scanner(source) {
         this.tokens = [];
         this.current = 0;
         this.start = 0;
         this.line = 1;
         this.source = source;
     }
-    endOfSource() {
+    Scanner.prototype.endOfSource = function () {
         return this.current >= this.source.length;
-    }
-    advance() {
+    };
+    Scanner.prototype.advance = function () {
         this.current = this.current + 1;
         return this.source[this.current - 1];
-    }
-    addToken(type, value) {
-        let token = new Token(type, value, null);
+    };
+    Scanner.prototype.addToken = function (type, value) {
+        var token = new Token(type, value, null);
         this.tokens.push(token);
-    }
-    peek() {
+    };
+    Scanner.prototype.peek = function () {
         return this.source[this.current];
-    }
-    isNumber(c) {
+    };
+    Scanner.prototype.isNumber = function (c) {
         return (c >= '0' && c <= '9');
-    }
-    isAlpha(c) {
+    };
+    Scanner.prototype.isAlpha = function (c) {
         return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
-    }
-    isAlphaNumeric(c) {
+    };
+    Scanner.prototype.isAlphaNumeric = function (c) {
         return (this.isNumber(c) || this.isAlpha(c));
-    }
-    scanToken() {
-        let c = this.advance();
+    };
+    Scanner.prototype.scanToken = function () {
+        var c = this.advance();
         switch (c) {
             case '(':
                 this.addToken(TokenTypes.LEFT_PAREN);
@@ -193,7 +198,7 @@ class Scanner {
                 }
                 //consume the last Quote '"'
                 this.advance();
-                let value = this.source.substring(this.start + 1, this.current - 1);
+                var value = this.source.substring(this.start + 1, this.current - 1);
                 this.addToken(TokenTypes.STRING, value);
             }
             case ' ':
@@ -217,7 +222,7 @@ class Scanner {
                             this.advance();
                         }
                     }
-                    let value = this.source.substring(this.start, this.current);
+                    var value = this.source.substring(this.start, this.current);
                     this.addToken(TokenTypes.NUMBER, value);
                 }
                 if (this.isAlpha(c)) {
@@ -226,7 +231,7 @@ class Scanner {
                     while (this.peek() && this.isAlphaNumeric(this.peek())) {
                         this.advance();
                     }
-                    let value = this.source.substring(this.start, this.current);
+                    var value = this.source.substring(this.start, this.current);
                     if (Keywords[value])
                         this.addToken(Keywords[value], value);
                     else
@@ -237,27 +242,28 @@ class Scanner {
                     break;
                 }
         }
-    }
-    scanTokens() {
+    };
+    Scanner.prototype.scanTokens = function () {
         while (!this.endOfSource()) {
             this.start = this.current;
             this.scanToken();
         }
         return this.tokens;
-    }
-}
+    };
+    return Scanner;
+}());
+exports.Scanner = Scanner;
 function report(line, where, message) {
-    console.log(`[ ${line}]: ${message}`);
+    console.log("[ " + line + "]: " + message);
 }
 function error(line, message) {
     report;
 }
 function run() {
-    let scanner = new Scanner('<=');
-    let tokens = scanner.scanTokens();
-    tokens.forEach(token => {
+    var scanner = new Scanner('<=');
+    var tokens = scanner.scanTokens();
+    tokens.forEach(function (token) {
         console.log(token);
     });
 }
-export default Scanner;
 //# sourceMappingURL=lexer.js.map

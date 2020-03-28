@@ -39,11 +39,12 @@ let Keywords = {
 }
 
 class Token{
-    type: string;
+    
+    type: TokenTypes;
     lexeme: string;
     line: number;
 
-    constructor(type: string, lexeme: string, line: number){
+    constructor(type: TokenTypes, lexeme: string, line: number){
         this.type = type;
         this.lexeme = lexeme;
         this.line = line;
@@ -254,4 +255,4 @@ function run(){
 
 }
 
-export  {Scanner, Token};
+export  {Scanner, Token, TokenTypes};
