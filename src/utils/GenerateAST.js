@@ -81,7 +81,8 @@ function defineExports(fd, types) {
         var classNameToExport = type.split('=>')[0].replace(" ", "");
         fs.appendFileSync(fd, "  " + classNameToExport + ",\n");
     });
-    fs.appendFileSync(fd, '  Visitor\n');
+    fs.appendFileSync(fd, '  Visitor,\n');
+    fs.appendFileSync(fd, '  Expr\n');
     fs.appendFileSync(fd, "}");
 }
 function defineVisitor(fd, className, types) {
