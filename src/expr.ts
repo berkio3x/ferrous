@@ -25,10 +25,10 @@ interface Visitor {
 class Binary implements Expr {
 
      left: Expr ;
-     operator: TokenTypes;
+     operator: Token;
      right: Expr;
 
-    constructor( left:Expr , operator:TokenTypes, right:Expr){
+    constructor( left:Expr , operator:Token, right:Expr){
 
 		this.left = left;
 		this.operator = operator;

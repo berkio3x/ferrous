@@ -69,7 +69,7 @@ class prettyPrinter implements Visitor{
 var fs = require('fs')
 
 let Expressions:Array<string> = [
-    "Binary=> left:Expr , operator:TokenTypes, right:Expr",
+    "Binary=> left:Expr , operator:Token, right:Expr",
     "Grouping=> expression:Expr",
     "Literal=> Value:Object",
     "Unary=> operator:TokenTypes, right: Expr"
