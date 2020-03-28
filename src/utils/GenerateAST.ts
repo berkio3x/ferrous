@@ -95,6 +95,7 @@ function defineExports(fd:any, types: Array<string>){
         fs.appendFileSync(fd,`  ${classNameToExport},\n`)
 
     })
+    fs.appendFileSync(fd, '  Visitor\n')
     fs.appendFileSync(fd, `}`)
 
 }

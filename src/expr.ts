@@ -97,4 +97,5 @@ export {
   Grouping,
   Literal,
   Unary,
+  Visitor
 }
