@@ -1,5 +1,7 @@
-!*/*.test.js
-
 *.js
 *.map
 node_modules/*
+
+
+!tests/*.test.js
+
