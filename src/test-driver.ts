@@ -9,7 +9,7 @@ import {ASTPrinter} from './ASTPrinter'
 // let expression:Expr = parser.parse();
 
 
-let scanner = new Scanner('6/3-2')
+let scanner = new Scanner('6/3*(-2+3)')
 let tokens = scanner.scanTokens()
 let parser = new Parser(tokens);
 let expression = parser.parse();
