@@ -2,6 +2,7 @@ import {Parser} from './parser'
 import {Scanner} from './lexer';
 import {Expr} from './Expr';
 import {ASTPrinter} from './ASTPrinter'
+import {Interpreter} from './interpreter';
 
 // let scanner = new Scanner('6/3-2')
 // let tokens = scanner.scanTokens()
@@ -9,15 +10,20 @@ import {ASTPrinter} from './ASTPrinter'
 // let expression:Expr = parser.parse();
 
 
-let scanner = new Scanner('-6 + 20')
+let scanner = new Scanner('8+(-6+2)*10')
 let tokens = scanner.scanTokens()
 let parser = new Parser(tokens);
 let expression = parser.parse();
 
 console.log('Started parsing :)')
 console.log(expression)
+let interpreter = new Interpreter()
 
-console.log(new ASTPrinter().print(expression))
+interpreter.interpret(expression)
+
+console.log("done interpreting! :)")
+
+// console.log(new ASTPrinter().print(expression))
 
 // let expr:Expr = new Binary(
 //     new Unary(
