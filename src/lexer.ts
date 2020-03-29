@@ -204,7 +204,8 @@ class Scanner {
                         }
                     }
                     let value: string = this.source.substring(this.start , this.current)
-                    this.addToken(TokenTypes.NUMBER, value)
+
+                    this.addToken(TokenTypes.NUMBER, Number(value))
 
                 }
                 if (this.isAlpha(c)){

@@ -3,19 +3,21 @@ import {Scanner} from './lexer';
 import {Expr} from './Expr';
 import {ASTPrinter} from './ASTPrinter'
 
+// let scanner = new Scanner('6/3-2')
+// let tokens = scanner.scanTokens()
+// let parser = new Parser(tokens);
+// let expression:Expr = parser.parse();
+
+
 let scanner = new Scanner('6/3-2')
 let tokens = scanner.scanTokens()
 let parser = new Parser(tokens);
-let expression:Expr = parser.parse();
-
+let expression = parser.parse();
 
 console.log('Started parsing :)')
+console.log(expression)
+
 console.log(new ASTPrinter().print(expression))
-
-
-
-
-
 
 // let expr:Expr = new Binary(
 //     new Unary(
