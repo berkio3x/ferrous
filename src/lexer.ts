@@ -43,11 +43,13 @@ class Token{
     type: TokenTypes;
     lexeme: string;
     line: number;
+    literal: Object;
 
-    constructor(type: TokenTypes, lexeme: string, line: number){
+    constructor(type: TokenTypes, lexeme: string, literal:Object, line: number){
         this.type = type;
         this.lexeme = lexeme;
         this.line = line;
+        this.literal = literal;
     }
 }
 
@@ -73,9 +75,15 @@ class Scanner {
    
     }
 
-    addToken(type: any, value?: any) {
-        let token = new Token(type, value, null);
-        this.tokens.push(token);
+    addToken(type:TokenTypes, literal?:Object){
+        
+        let text :string = this.source.substring(this.start, this.current)
+        if (literal){
+            this.tokens.push(new Token(type, text, literal, this.line))
+        }
+        else{
+            this.tokens.push(new Token(type, text, null, this.line))
+        }
     }
 
     peek(): string  {

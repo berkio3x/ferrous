@@ -66,10 +66,11 @@ var Keywords = {
     "while": TokenTypes.WHILE
 };
 var Token = /** @class */ (function () {
-    function Token(type, lexeme, line) {
+    function Token(type, lexeme, literal, line) {
         this.type = type;
         this.lexeme = lexeme;
         this.line = line;
+        this.literal = literal;
     }
     return Token;
 }());
@@ -89,9 +90,14 @@ var Scanner = /** @class */ (function () {
         this.current = this.current + 1;
         return this.source[this.current - 1];
     };
-    Scanner.prototype.addToken = function (type, value) {
-        var token = new Token(type, value, null);
-        this.tokens.push(token);
+    Scanner.prototype.addToken = function (type, literal) {
+        var text = this.source.substring(this.start, this.current);
+        if (literal) {
+            this.tokens.push(new Token(type, text, literal, this.line));
+        }
+        else {
+            this.tokens.push(new Token(type, text, null, this.line));
+        }
     };
     Scanner.prototype.peek = function () {
         return this.source[this.current];

@@ -3,8 +3,6 @@ import {Binary, Unary, Literal, Grouping} from './Expr';
 import { Token, TokenTypes } from './lexer';
 
 
-
-
 class ASTPrinter implements Visitor{
 
     print(expr: Expr){
@@ -44,15 +42,4 @@ class ASTPrinter implements Visitor{
 }
 
 
-let expr:Expr = new Binary(
-    new Unary(
-        new Token(TokenTypes.MINUS, "-", 1),
-        new Literal(123)
-    ),
-    new Token(TokenTypes.STAR,"*",1),
-    new Grouping(
-        new Literal(45.67)
-    ));
-
-console.log(new ASTPrinter().print(expr))
 export {ASTPrinter}
