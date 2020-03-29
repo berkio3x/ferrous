@@ -1,5 +1,5 @@
 # Ferrous 🧪
-Ferrous is a statically typed interpreted programming language.  
+Ferrous is a dynamically typed interpreted programming language.  
 
 **The compiler is written in Typescript**
 
