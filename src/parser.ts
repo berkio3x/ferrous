@@ -16,12 +16,31 @@ primary        → NUMBER | STRING | "false" | "true" | "nil"
 
  */
 
+ /*
+    Extra care to be given to Error reporting if there is a error in the syntax of th program,
+    When an malformed syntax is detected, there are two course of action that has to be taken,
+    1) Detect & Report the error
+    2) Must not hang & go in an incosistent state,
+    3) Minimize cascade Errors by using `Panic mode Recovery`: 
+        When an error is encountered by the parser, it may report a no of other errors which may
+        not be real errors in the code & is instantly fixed by just fixing this one error
+ */
 
 
 import {Token, TokenTypes} from './lexer';
 import {Expr, Binary, Unary, Literal, Grouping} from './Expr';
+import {error} from './error';
 
-class Parser{
+
+class ParserError extends Error{
+    constructor(message?:string ){
+        super(message)
+        Object.setPrototypeOf(this, new.target.prototype)
+    }
+}
+
+
+class Parser {
     current: number = 0;
     tokens: Array<Token>;
 
@@ -34,7 +53,8 @@ class Parser{
             return this.expression();
         }
         catch(error){
-            return null;
+            if (error instanceof ParserError)
+                return null;
         }
     }
 
@@ -77,10 +97,9 @@ class Parser{
 
     }
 
-    error(token:Token, message:string){
-        console.log("Parsing error occured yo!")
-        return new Error('Runtime Exception')
-
+    error(token:Token, message:string) : ParserError{ 
+        error(token, message);
+        return new ParserError();
     }
 
     synchronize(){
@@ -124,7 +143,7 @@ class Parser{
             this.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after expression.");
             return new Grouping(expr);   
         }
-        throw this.error(this.peek(), "EXpect Expression.");
+        throw this.error(this.peek(), "Expect Expression.");
 
     }
 

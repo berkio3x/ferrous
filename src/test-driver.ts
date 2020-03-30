@@ -10,18 +10,15 @@ import {Interpreter} from './interpreter';
 // let expression:Expr = parser.parse();
 
 
-let scanner = new Scanner('8+(-6+2)*10')
+let scanner = new Scanner('8+(-6+2)*hello')
 let tokens = scanner.scanTokens()
 let parser = new Parser(tokens);
 let expression = parser.parse();
 
-console.log('Started parsing :)')
-console.log(expression)
-let interpreter = new Interpreter()
+// let interpreter = new Interpreter()
 
-interpreter.interpret(expression)
+// interpreter.interpret(expression)
 
-console.log("done interpreting! :)")
 
 // console.log(new ASTPrinter().print(expression))
 

@@ -10,17 +10,17 @@ class Interpreter implements Visitor{
             console.log(value)
         }
         catch(error){
-            console.log("[Interpreter] : Error Occure while evaluating source.")
+            console.log(`[Interpreter] : Error Occure while evaluating source.\n${error}`)
         }
 
     }
 
-    evaluate(expr:Expr){
+    evaluate(expr:Expr) {
         return expr.accept(this)
     }
 
 
-    isTruthy(object:Object){
+    isTruthy(object:Object) {
         if(object === null) return false
         if(typeof object == "boolean") return Boolean(object);
         return true
@@ -53,7 +53,7 @@ class Interpreter implements Visitor{
             case TokenTypes.MINUS:
                 this.checkNumberOperand(expr.operator, right)
                 return  Number(left) - Number(right);
-
+            
             case TokenTypes.SLASH:
                 this.checkNumberOperands(expr.operator ,left, right)
                 return Number(left) / Number(right);

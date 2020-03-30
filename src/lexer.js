@@ -259,11 +259,8 @@ var Scanner = /** @class */ (function () {
     return Scanner;
 }());
 exports.Scanner = Scanner;
-function report(line, where, message) {
-    console.log("[ " + line + "]: " + message);
-}
 function error(line, message) {
-    report;
+    // TODO: Fix this
 }
 function run() {
     var scanner = new Scanner('<=');

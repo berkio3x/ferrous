@@ -243,13 +243,9 @@ class Scanner {
     }
 }
 
-function report(line: number, where: string, message: string){
-    console.log(`[ ${line}]: ${message}`);
-
-}
 
 function error(line: number , message: string ){
-    report
+    // TODO: Fix this
 }
 
 function run(){
