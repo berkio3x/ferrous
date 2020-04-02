@@ -1,9 +1,10 @@
 import {ExprVisitor, Expr} from './Expr';
 import {Binary, Unary, Literal, Grouping} from './Expr';
 import { Token, TokenTypes } from './lexer';
+import { StmtVisitor } from './Stmt';
 
 
-class ASTPrinter implements ExprVisitor{
+class ASTPrinter implements ExprVisitor, StmtVisitor{
 
     print(expr: Expr){
         return expr.accept(this)
@@ -39,6 +40,24 @@ class ASTPrinter implements ExprVisitor{
         return this.parenthesize(expr.operator.lexeme, expr.right);
 
     }
+
+    visitVariableExpr(){
+
+    }
+
+    visitVarStmt(){
+
+    }
+
+    visitPrintStmt(){
+
+
+    }
+
+    visitExpressionStmt(){
+        
+    }
+    
 }
 
 

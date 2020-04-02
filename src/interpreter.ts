@@ -1,8 +1,8 @@
-import {ExprVisitor, Expr, Literal, Grouping, Unary, Binary} from './Expr';
-import {StmtVisitor, Expression, Print, Stmt} from './Stmt';
+import {ExprVisitor, Expr, Literal, Grouping, Unary, Binary, Variable} from './Expr';
+import {StmtVisitor, Expression, Print, Stmt, Var} from './Stmt';
 import { Token, TokenTypes } from './lexer';
 import {error} from './error';
-
+import {Environment} from './Environment';
 
 class RuntimeError extends Error{
     token:Token;
@@ -21,10 +21,14 @@ function runtimeError(error:RuntimeError){
 
 class Interpreter implements ExprVisitor, StmtVisitor{
 
+     env:Environment = new Environment();
+
     interpret(stmts:Array<Stmt>){
         try{
             stmts.forEach(stmt=>{
+
                 this.execute(stmt); 
+
             })
         }catch(error){
             if (error instanceof RuntimeError){
@@ -35,22 +39,11 @@ class Interpreter implements ExprVisitor, StmtVisitor{
     }
 
     execute(stmt:Stmt){
+        console.log("Executing...", stmt)
         stmt.accept(this);
 
     }
 
-    // interpret(expression:Expr){
-    //     try{
-    //         let value:Object = this.evaluate(expression)
-    //         console.log(value)
-    //     }
-    //     catch(error){           
-    //         if(error instanceof RuntimeError){
-    //             runtimeError(error)
-    //         }
-    //         console.log(`[Interpreter] : Error Occure while evaluating source.\n${error}`)
-    //     }
-    // }
 
     evaluate(expr:Expr) {
         return expr.accept(this)
@@ -169,6 +162,19 @@ class Interpreter implements ExprVisitor, StmtVisitor{
         let value:Object = this.evaluate(stm.expression)
         console.log(value);
         return null;
+    }
+
+    visitVarStmt(stmt:Var){
+        let value:Object = null;
+        if(stmt.initializer != null){
+            value = this.evaluate(stmt.initializer);
+        }
+        this.env.define(stmt.name.lexeme, value);
+        return null;
+    }
+
+    visitVariableExpr(expr:Variable){
+        return this.env.get(expr.name);
     }
 
   

@@ -14,22 +14,22 @@ interface Expr{
 
     accept(vv: ExprVisitor): any;
 }
-
 interface ExprVisitor {
 
     visitBinaryExpr (vs: Binary ):any ;
     visitGroupingExpr (vs: Grouping ):any ;
     visitLiteralExpr (vs: Literal ):any ;
     visitUnaryExpr (vs: Unary ):any ;
+    visitVariableExpr (vs: Variable ):any ;
 }
 
 class Binary implements Expr {
 
-     left: Expr ;
+    left: Expr ;
      operator: Token;
      right: Expr;
 
-    constructor( left:Expr , operator:Token, right:Expr){
+    constructor(left:Expr , operator:Token, right:Expr){
 
 		this.left = left;
 		this.operator = operator;
@@ -45,9 +45,9 @@ class Binary implements Expr {
 
 class Grouping implements Expr {
 
-     expression: Expr;
+    expression: Expr;
 
-    constructor( expression:Expr){
+    constructor(expression:Expr){
 
 		this.expression = expression;
 
@@ -61,9 +61,9 @@ class Grouping implements Expr {
 
 class Literal implements Expr {
 
-     Value: Object;
+    Value: Object;
 
-    constructor( Value:Object){
+    constructor(Value:Object){
 
 		this.Value = Value;
 
@@ -77,10 +77,10 @@ class Literal implements Expr {
 
 class Unary implements Expr {
 
-     operator: Token;
+    operator: Token;
      right:  Expr;
 
-    constructor( operator:Token, right: Expr){
+    constructor(operator:Token, right: Expr){
 
 		this.operator = operator;
 		this.right = right;
@@ -93,11 +93,28 @@ class Unary implements Expr {
 
 }
 
+class Variable implements Expr {
+
+    name: Token;
+
+    constructor(name:Token){
+
+		this.name = name;
+
+    }
+
+    accept(vv: ExprVisitor) {
+        return vv.visitVariableExpr(this);
+    }
+
+}
+
 export {
   Binary,
   Grouping,
   Literal,
   Unary,
+  Variable,
   ExprVisitor,
   Expr
 }

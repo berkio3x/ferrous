@@ -19,13 +19,14 @@ interface StmtVisitor {
 
     visitExpressionStmt (vs: Expression ):any ;
     visitPrintStmt (vs: Print ):any ;
+    visitVarStmt (vs: Var ):any ;
 }
 
 class Expression implements Stmt {
 
-     expression: Expr;
+    expression: Expr;
 
-    constructor( expression:Expr){
+    constructor(expression:Expr){
 
 		this.expression = expression;
 
@@ -39,9 +40,9 @@ class Expression implements Stmt {
 
 class Print implements Stmt {
 
-     expression: Expr;
+    expression: Expr;
 
-    constructor( expression:Expr){
+    constructor(expression:Expr){
 
 		this.expression = expression;
 
@@ -53,9 +54,28 @@ class Print implements Stmt {
 
 }
 
+class Var implements Stmt {
+
+    name: Token;
+     initializer: Expr;
+
+    constructor(name:Token, initializer:Expr){
+
+		this.name = name;
+		this.initializer = initializer;
+
+    }
+
+    accept(vv: StmtVisitor) {
+        return vv.visitVarStmt(this);
+    }
+
+}
+
 export {
   Expression,
   Print,
+  Var,
   StmtVisitor,
   Stmt
 }

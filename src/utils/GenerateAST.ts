@@ -199,16 +199,18 @@ let outputDir: string = process.argv[2];
 console.log(outputDir);
 
 let Expressions: Array<string> = [
-  "Binary=> left:Expr , operator:Token, right:Expr",
-  "Grouping=> expression:Expr",
-  "Literal=> Value:Object",
-  "Unary=> operator:Token, right: Expr",
+  "Binary=>left:Expr , operator:Token, right:Expr",
+  "Grouping=>expression:Expr",
+  "Literal=>Value:Object",
+  "Unary=>operator:Token, right: Expr",
+  "Variable=>name:Token"
 ];
 
 
 let Statements:Array<string> =[
-  "Expression=> expression:Expr",
-  "Print=> expression:Expr"
+  "Expression=>expression:Expr",
+  "Print=>expression:Expr",
+  "Var=>name:Token, initializer:Expr"
 ]
 
 GenerateAst(outputDir, "Expr", Expressions,[]);

@@ -233,7 +233,7 @@ var Scanner = /** @class */ (function () {
                 }
                 if (this.isAlpha(c)) {
                     //identifiers
-                    this.advance();
+                    //this.advance()
                     while (this.peek() && this.isAlphaNumeric(this.peek())) {
                         this.advance();
                     }

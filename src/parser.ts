@@ -2,6 +2,11 @@
 
 A Recursive descent parser for the following Grammar.
 program        -> statement* EOF;
+decls          -> varDecl 
+                | statement;
+
+varDecl        -> "var" IDENTIFIER ("=" expression)? ";" ;
+
 statement      -> exprStmt
                 | printStmt;
 
@@ -16,7 +21,7 @@ multiplication → unary ( ( "/" | "*" ) unary )* ;
 unary          → ( "!" | "-" ) unary
                | primary ;
 primary        → NUMBER | STRING | "false" | "true" | "nil"
-               | "(" expression ")" ;
+               | "(" expression ")" | IDENTIFIER ;
      
 6 / 3 -1
 
@@ -34,9 +39,9 @@ primary        → NUMBER | STRING | "false" | "true" | "nil"
 
 
 import {Token, TokenTypes} from './lexer';
-import {Expr, Binary, Unary, Literal, Grouping} from './Expr';
+import {Expr, Binary, Unary, Literal, Grouping, Variable} from './Expr';
 import {error} from './error';
-import {Stmt, Expression, Print} from './Stmt';
+import {Stmt, Expression, Print, Var} from './Stmt';
 
 class ParserError extends Error{
     constructor(message?:string ){
@@ -58,11 +63,37 @@ class Parser {
         
         let stmts : Array<Stmt>=[];
         while(!this.isAtEnd()){
-            stmts.push(this.statement())
+            stmts.push(this.declaration());
         }
         return stmts; 
 
     }
+
+    declaration():Stmt{
+        try{
+            if (this.match(TokenTypes.VAR)) return this.valDeclration();
+            return this.statement();
+        }
+        catch(error){
+            if (error instanceof ParserError){
+                this.synchronize();
+                return null;
+            }
+        }
+    }
+
+    valDeclration(){
+        let name:Token = this.consume(TokenTypes.IDENTIFIER, "Expect variable name.");
+        let initializer:Expr = null;
+        if(this.match(TokenTypes.EQUAL)){
+            initializer = this.expression();
+        }
+        this.consume(TokenTypes.SEMICOLON, "Expect ';' after variable declaration");
+        
+        return new Var(name, initializer);
+    }
+
+
 
     statement():Stmt{
         if(this.match(TokenTypes.PRINT)) {
@@ -73,20 +104,18 @@ class Parser {
 
 
     printStatement():Stmt{
+        console.log("got print...")
         let value = this.expression();
+        console.log("value :", value)
         this.consume(TokenTypes.SEMICOLON,"Expect ';' after value.");
         return new Print(value);
     }
 
-
-
     expressionStatement():Stmt{
         let expr:Expr = this.expression()
         this.consume(TokenTypes.SEMICOLON, "Expect ';' after expression.");
-        return new Expression(expr);                  
-    
+        return new Expression(expr);
     }
-
 
     isAtEnd(){
         return this.current >= this.tokens.length;
@@ -169,6 +198,12 @@ class Parser {
             this.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after expression.");
             return new Grouping(expr);   
         }
+
+        if (this.match(TokenTypes.IDENTIFIER)){
+            console.log("got ident")
+            return new Variable(this.previous());
+        }
+
         throw this.error(this.peek(), "Expect Expression.");
 
     }

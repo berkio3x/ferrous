@@ -1,37 +1,27 @@
 import {Parser} from './parser'
 import {Scanner} from './lexer';
 import {Expr} from './Expr';
-import {ASTPrinter} from './ASTPrinter'
+// import {ASTPrinter} from './ASTPrinter'
+
 import {Interpreter} from './interpreter';
 import { Stmt } from './Stmt';
 
 
 let scanner = new Scanner(`
-    print 2+1;
-    print true;
-    print false;
-    print 30+3*2;
+  var a = 10;
+  var b = 90;
+
+  print a + b;
 
 `)
 
-
 let tokens = scanner.scanTokens()
+console.log("Tokens :\n",tokens,"\n\n")
 let parser = new Parser(tokens);
 let stmts:Array<Stmt> = parser.parse();
+console.log("Statements :\n",stmts,"\n\n");
 
 let interpreter = new Interpreter()
 interpreter.interpret(stmts)
 
-
-// console.log(new ASTPrinter().print(expression))
-
-// let expr:Expr = new Binary(
-//     new Unary(
-//         new Token(TokenTypes.MINUS, "-", null, 1),
-//         new Literal(123)
-//     ),
-//     new Token(TokenTypes.STAR,"*",null,1),
-//     new Grouping(
-//         new Literal(45.67)
-//     ));
 

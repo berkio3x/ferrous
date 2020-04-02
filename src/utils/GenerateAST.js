@@ -156,14 +156,16 @@ if (process.argv.length === 2) {
 var outputDir = process.argv[2];
 console.log(outputDir);
 var Expressions = [
-    "Binary=> left:Expr , operator:Token, right:Expr",
-    "Grouping=> expression:Expr",
-    "Literal=> Value:Object",
-    "Unary=> operator:Token, right: Expr",
+    "Binary=>left:Expr , operator:Token, right:Expr",
+    "Grouping=>expression:Expr",
+    "Literal=>Value:Object",
+    "Unary=>operator:Token, right: Expr",
+    "Variable=>name:Token"
 ];
 var Statements = [
-    "Expression=> expression:Expr",
-    "Print=> expression:Expr"
+    "Expression=>expression:Expr",
+    "Print=>expression:Expr",
+    "Var=>name:Token, initializer:Expr"
 ];
 GenerateAst(outputDir, "Expr", Expressions, []);
 GenerateAst(outputDir, "Stmt", Statements, ["Expr:./Expr"]);
