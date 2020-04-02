@@ -1,19 +1,56 @@
-import {Visitor, Expr, Literal, Grouping, Unary, Binary} from '../src/Expr';
+import {ExprVisitor, Expr, Literal, Grouping, Unary, Binary} from './Expr';
+import {StmtVisitor, Expression, Print, Stmt} from './Stmt';
 import { Token, TokenTypes } from './lexer';
+import {error} from './error';
 
 
-class Interpreter implements Visitor{
+class RuntimeError extends Error{
+    token:Token;
+    constructor(token:Token ,message?:string){
+        super(message)
+        this.token = token;
+        Object.setPrototypeOf(this, new.target.prototype)
+    }
+}
 
-    interpret(expression:Expr){
+
+function runtimeError(error:RuntimeError){
+    console.log(error.message+'\n[Line '+ error.token.line+"]");
+}
+
+
+class Interpreter implements ExprVisitor, StmtVisitor{
+
+    interpret(stmts:Array<Stmt>){
         try{
-            let value:Object = this.evaluate(expression)
-            console.log(value)
-        }
-        catch(error){
-            console.log(`[Interpreter] : Error Occure while evaluating source.\n${error}`)
+            stmts.forEach(stmt=>{
+                this.execute(stmt); 
+            })
+        }catch(error){
+            if (error instanceof RuntimeError){
+                runtimeError(error)
+            }
         }
 
     }
+
+    execute(stmt:Stmt){
+        stmt.accept(this);
+
+    }
+
+    // interpret(expression:Expr){
+    //     try{
+    //         let value:Object = this.evaluate(expression)
+    //         console.log(value)
+    //     }
+    //     catch(error){           
+    //         if(error instanceof RuntimeError){
+    //             runtimeError(error)
+    //         }
+    //         console.log(`[Interpreter] : Error Occure while evaluating source.\n${error}`)
+    //     }
+    // }
 
     evaluate(expr:Expr) {
         return expr.accept(this)
@@ -36,12 +73,12 @@ class Interpreter implements Visitor{
 
     checkNumberOperand(operator:Token, operand:Object){
         if( typeof operator === "number") return ;
-        throw new Error(`${operator}: Operand must be a number`)
+        throw new RuntimeError(operator,`Operand must be a number`)
     }
 
     checkNumberOperands(operator:Token, left:Object, right:Object){
         if(typeof left === "number" && typeof right === "number") return;
-        throw new Error(`${operator}: Operands must be a numbers `)
+        throw new RuntimeError(operator,`Operands must be a numbers `)
     }
 
     visitBinaryExpr(expr:Binary){
@@ -68,7 +105,7 @@ class Interpreter implements Visitor{
                 if (typeof left == "string" && typeof right == "string")
                     return String(left)  + String(right)
 
-                throw new Error("Operands must be two numbers or two strings")
+                throw new RuntimeError(expr.operator, "Operands must be two numbers or two strings")
 
             case TokenTypes.GREATER:
                 this.checkNumberOperands(expr.operator, left, right)
@@ -120,6 +157,17 @@ class Interpreter implements Visitor{
                 return !this.isTruthy(right)
         }
         // Unreachable
+        return null;
+    }
+
+    visitExpressionStmt(stm:Expression){
+        this.evaluate(stm.expression);
+        return null;
+    }
+
+    visitPrintStmt(stm:Print){
+        let value:Object = this.evaluate(stm.expression)
+        console.log(value);
         return null;
     }
 

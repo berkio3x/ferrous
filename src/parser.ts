@@ -1,6 +1,12 @@
 /*
 
 A Recursive descent parser for the following Grammar.
+program        -> statement* EOF;
+statement      -> exprStmt
+                | printStmt;
+
+exprStmt        -> expression ";" ;
+printStmt       -> print expression "  ";"  ;
 
 expression     → equality ;
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
@@ -30,7 +36,7 @@ primary        → NUMBER | STRING | "false" | "true" | "nil"
 import {Token, TokenTypes} from './lexer';
 import {Expr, Binary, Unary, Literal, Grouping} from './Expr';
 import {error} from './error';
-
+import {Stmt, Expression, Print} from './Stmt';
 
 class ParserError extends Error{
     constructor(message?:string ){
@@ -48,14 +54,37 @@ class Parser {
         this.tokens = tokens;
     }
 
-    parse():Expr {
-        try{
-            return this.expression();
+    parse():Array<Stmt> {
+        
+        let stmts : Array<Stmt>=[];
+        while(!this.isAtEnd()){
+            stmts.push(this.statement())
         }
-        catch(error){
-            if (error instanceof ParserError)
-                return null;
+        return stmts; 
+
+    }
+
+    statement():Stmt{
+        if(this.match(TokenTypes.PRINT)) {
+            return this.printStatement()
         }
+        return this.expressionStatement()
+    }
+
+
+    printStatement():Stmt{
+        let value = this.expression();
+        this.consume(TokenTypes.SEMICOLON,"Expect ';' after value.");
+        return new Print(value);
+    }
+
+
+
+    expressionStatement():Stmt{
+        let expr:Expr = this.expression()
+        this.consume(TokenTypes.SEMICOLON, "Expect ';' after expression.");
+        return new Expression(expr);                  
+    
     }
 
 
@@ -121,9 +150,6 @@ class Parser {
               this.advance();                                                      
             }
     }
-
-    
-
 
     consume(type:TokenTypes, message:string){
         if(this.check(type)) return this.advance();

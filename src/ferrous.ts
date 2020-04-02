@@ -3,21 +3,24 @@ import {Scanner} from './lexer';
 import {Expr} from './Expr';
 import {ASTPrinter} from './ASTPrinter'
 import {Interpreter} from './interpreter';
-
-// let scanner = new Scanner('6/3-2')
-// let tokens = scanner.scanTokens()
-// let parser = new Parser(tokens);
-// let expression:Expr = parser.parse();
+import { Stmt } from './Stmt';
 
 
-let scanner = new Scanner('8+(-6+2)*hello')
+let scanner = new Scanner(`
+    print 2+1;
+    print true;
+    print false;
+    print 30+3*2;
+
+`)
+
+
 let tokens = scanner.scanTokens()
 let parser = new Parser(tokens);
-let expression = parser.parse();
+let stmts:Array<Stmt> = parser.parse();
 
-// let interpreter = new Interpreter()
-
-// interpreter.interpret(expression)
+let interpreter = new Interpreter()
+interpreter.interpret(stmts)
 
 
 // console.log(new ASTPrinter().print(expression))

@@ -1,9 +1,9 @@
-import {Visitor, Expr} from './Expr';
+import {ExprVisitor, Expr} from './Expr';
 import {Binary, Unary, Literal, Grouping} from './Expr';
 import { Token, TokenTypes } from './lexer';
 
 
-class ASTPrinter implements Visitor{
+class ASTPrinter implements ExprVisitor{
 
     print(expr: Expr){
         return expr.accept(this)

@@ -66,27 +66,21 @@ class prettyPrinter implements Visitor{
 
 */
 var fs = require("fs");
-var Expressions = [
-    "Binary=> left:Expr , operator:Token, right:Expr",
-    "Grouping=> expression:Expr",
-    "Literal=> Value:Object",
-    "Unary=> operator:Token, right: Expr",
-];
 function defineIntro(fd) {
     fs.appendFileSync(fd, "\n        \n\n/* \nThis is an auto generated file by using utils/exprGen.ts utility cli program of Ferrous.\n(\u3063\u25D4\u25E1\u25D4)\u3063 \u2665 ast \u2665\n*/\n        \n\n\n");
 }
-function defineExports(fd, types) {
+function defineExports(fd, baseClassName, types) {
     fs.appendFileSync(fd, "export {\n");
     types.forEach(function (type) {
         var classNameToExport = type.split("=>")[0].replace(" ", "");
         fs.appendFileSync(fd, "  " + classNameToExport + ",\n");
     });
-    fs.appendFileSync(fd, "  Visitor,\n");
-    fs.appendFileSync(fd, "  Expr\n");
+    fs.appendFileSync(fd, "  " + baseClassName + "Visitor,\n");
+    fs.appendFileSync(fd, "  " + baseClassName + "\n");
     fs.appendFileSync(fd, "}");
 }
 function defineVisitor(fd, className, types) {
-    fs.appendFileSync(fd, "interface Visitor {\n\n");
+    fs.appendFileSync(fd, "interface " + className + "Visitor {\n\n");
     types.forEach(function (type) {
         var typeName = type.split("=>")[0].replace(" ", "");
         fs.appendFileSync(fd, "    visit" + typeName + className + " (vs: " + typeName + " ):any ;\n");
@@ -94,7 +88,7 @@ function defineVisitor(fd, className, types) {
     fs.appendFileSync(fd, "}\n\n");
 }
 function defineType(fd, className, baseClassName, attributes) {
-    fs.appendFileSync(fd, "class " + className + " implements Expr {\n", "utf8");
+    fs.appendFileSync(fd, "class " + className + " implements " + baseClassName + " {\n", "utf8");
     fs.appendFileSync(fd, "\n");
     attributes.forEach(function (attr) {
         var attrName = attr.split(":")[0];
@@ -112,20 +106,29 @@ function defineType(fd, className, baseClassName, attributes) {
     });
     fs.appendFileSync(fd, "\n    }\n\n");
     //define accept method of the concrete class implementations
-    fs.appendFileSync(fd, "    accept(vv: Visitor) {\n");
+    fs.appendFileSync(fd, "    accept(vv: " + baseClassName + "Visitor) {\n");
     fs.appendFileSync(fd, "        return vv.visit" + className + baseClassName + "(this);\n");
     fs.appendFileSync(fd, "    }\n");
     fs.appendFileSync(fd, "\n}\n\n");
 }
-function GenerateAst(outputDir, baseClassName) {
+function defineImports(fd, deps) {
+    deps.forEach(function (dep) {
+        console.log(dep);
+        var depName = dep.split(':')[0];
+        var depPath = dep.split(':')[1];
+        fs.appendFileSync(fd, "import {" + depName + "} from '" + depPath + "'\n");
+    });
+}
+function GenerateAst(outputDir, baseClassName, ast, deps) {
     var fileName = outputDir + "/" + baseClassName + ".ts";
     var error = null;
     try {
         var fd = fs.openSync(fileName, "a");
         defineIntro(fd);
         fs.appendFileSync(fd, "import {Token} from './lexer';\n\n");
+        defineImports(fd, deps);
         fs.appendFileSync(fd, "interface " + baseClassName + "{\n\n", "utf8");
-        fs.appendFileSync(fd, "    accept(vv: Visitor): any;\n");
+        fs.appendFileSync(fd, "    accept(vv: " + baseClassName + "Visitor): any;\n");
         fs.appendFileSync(fd, "}\n");
     }
     catch (err) {
@@ -133,14 +136,14 @@ function GenerateAst(outputDir, baseClassName) {
         console.error("Error while writing to file");
     }
     if (!error) {
-        defineVisitor(fd, baseClassName, Expressions);
+        defineVisitor(fd, baseClassName, ast);
         // generate rest of the classes
-        Expressions.forEach(function (item) {
+        ast.forEach(function (item) {
             var className = item.split("=>")[0];
             var attrs = item.split("=>")[1].split(",");
             defineType(fd, className, baseClassName, attrs);
         });
-        defineExports(fd, Expressions);
+        defineExports(fd, baseClassName, ast);
     }
     else {
         fs.closeSync(fd);
@@ -152,5 +155,16 @@ if (process.argv.length === 2) {
 }
 var outputDir = process.argv[2];
 console.log(outputDir);
-GenerateAst(outputDir, "Expr");
+var Expressions = [
+    "Binary=> left:Expr , operator:Token, right:Expr",
+    "Grouping=> expression:Expr",
+    "Literal=> Value:Object",
+    "Unary=> operator:Token, right: Expr",
+];
+var Statements = [
+    "Expression=> expression:Expr",
+    "Print=> expression:Expr"
+];
+GenerateAst(outputDir, "Expr", Expressions, []);
+GenerateAst(outputDir, "Stmt", Statements, ["Expr:./Expr"]);
 //# sourceMappingURL=GenerateAST.js.map

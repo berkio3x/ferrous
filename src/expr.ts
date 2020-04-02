@@ -12,9 +12,10 @@ import {Token} from './lexer';
 
 interface Expr{
 
-    accept(vv: Visitor): any;
+    accept(vv: ExprVisitor): any;
 }
-interface Visitor {
+
+interface ExprVisitor {
 
     visitBinaryExpr (vs: Binary ):any ;
     visitGroupingExpr (vs: Grouping ):any ;
@@ -36,7 +37,7 @@ class Binary implements Expr {
 
     }
 
-    accept(vv: Visitor) {
+    accept(vv: ExprVisitor) {
         return vv.visitBinaryExpr(this);
     }
 
@@ -52,7 +53,7 @@ class Grouping implements Expr {
 
     }
 
-    accept(vv: Visitor) {
+    accept(vv: ExprVisitor) {
         return vv.visitGroupingExpr(this);
     }
 
@@ -68,7 +69,7 @@ class Literal implements Expr {
 
     }
 
-    accept(vv: Visitor) {
+    accept(vv: ExprVisitor) {
         return vv.visitLiteralExpr(this);
     }
 
@@ -86,7 +87,7 @@ class Unary implements Expr {
 
     }
 
-    accept(vv: Visitor) {
+    accept(vv: ExprVisitor) {
         return vv.visitUnaryExpr(this);
     }
 
@@ -97,6 +98,6 @@ export {
   Grouping,
   Literal,
   Unary,
-  Visitor,
+  ExprVisitor,
   Expr
 }
