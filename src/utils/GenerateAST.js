@@ -156,6 +156,7 @@ if (process.argv.length === 2) {
 var outputDir = process.argv[2];
 console.log(outputDir);
 var Expressions = [
+    "Assign=>name:Token, value:Expr",
     "Binary=>left:Expr , operator:Token, right:Expr",
     "Grouping=>expression:Expr",
     "Literal=>Value:Object",

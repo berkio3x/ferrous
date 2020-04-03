@@ -13,7 +13,11 @@ statement      -> exprStmt
 exprStmt        -> expression ";" ;
 printStmt       -> print expression "  ";"  ;
 
-expression     → equality ;
+expression     -> assignment;
+
+assignment     -> IDENTIFIER "=" assignment;
+            |   | equality;
+
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → addition ( ( ">" | ">=" | "<" | "<=" ) addition )* ;
 addition       → multiplication ( ( "-" | "+" ) multiplication )* ;
@@ -39,9 +43,10 @@ primary        → NUMBER | STRING | "false" | "true" | "nil"
 
 
 import {Token, TokenTypes} from './lexer';
-import {Expr, Binary, Unary, Literal, Grouping, Variable} from './Expr';
+import {Expr, Binary, Unary, Literal, Grouping, Variable, Assign} from './Expr';
 import {error} from './error';
 import {Stmt, Expression, Print, Var} from './Stmt';
+import { equal } from 'assert';
 
 class ParserError extends Error{
     constructor(message?:string ){
@@ -104,9 +109,7 @@ class Parser {
 
 
     printStatement():Stmt{
-        console.log("got print...")
         let value = this.expression();
-        console.log("value :", value)
         this.consume(TokenTypes.SEMICOLON,"Expect ';' after value.");
         return new Print(value);
     }
@@ -150,9 +153,27 @@ class Parser {
         return false;
     }
 
-    expression(): Expr {
-        return this.equality();
 
+    assignment(): Expr {
+        let expr:Expr = this.equality();
+        if(this.match(TokenTypes.EQUAL)){
+            let equals:Token = this.previous();
+            let value:Expr  = this.assignment();
+            
+            if(expr instanceof Variable) {
+                let name:Token = expr.name;
+                return new Assign(name, value);
+            }
+            this.error(equals,"Invalid Assignment target");
+
+        }
+        return expr;
+
+    }
+
+    expression(): Expr {
+
+        return this.assignment();
     }
 
     error(token:Token, message:string) : ParserError{ 
@@ -200,7 +221,6 @@ class Parser {
         }
 
         if (this.match(TokenTypes.IDENTIFIER)){
-            console.log("got ident")
             return new Variable(this.previous());
         }
 

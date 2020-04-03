@@ -11,6 +11,7 @@ let scanner = new Scanner(`
   var a = 10;
   var b = 90;
 
+  a = 40; 
   print a + b;
 
 `)

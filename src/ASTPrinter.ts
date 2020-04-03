@@ -1,64 +1,64 @@
-import {ExprVisitor, Expr} from './Expr';
-import {Binary, Unary, Literal, Grouping} from './Expr';
-import { Token, TokenTypes } from './lexer';
-import { StmtVisitor } from './Stmt';
+// import {ExprVisitor, Expr} from './Expr';
+// import {Binary, Unary, Literal, Grouping} from './Expr';
+// import { Token, TokenTypes } from './lexer';
+// import { StmtVisitor } from './Stmt';
 
 
-class ASTPrinter implements ExprVisitor, StmtVisitor{
+// class ASTPrinter implements ExprVisitor, StmtVisitor{
 
-    print(expr: Expr){
-        return expr.accept(this)
-    }
-    parenthesize(name: string, ...exprs: Expr[]){
-        let output: string = '' ;
-        output = output+ `(${name}`;
+//     print(expr: Expr){
+//         return expr.accept(this)
+//     }
+//     parenthesize(name: string, ...exprs: Expr[]){
+//         let output: string = '' ;
+//         output = output+ `(${name}`;
 
-        exprs.forEach((expr)=>{
-            output = output + " ";
-            output = output + expr.accept(this);
+//         exprs.forEach((expr)=>{
+//             output = output + " ";
+//             output = output + expr.accept(this);
 
-        })
-        output = output + ")";
-        return output
+//         })
+//         output = output + ")";
+//         return output
 
-}
+// }
 
-    visitBinaryExpr(expr: Binary){
-        return this.parenthesize(expr.operator.lexeme, expr.left, expr.right);
-    }
+//     visitBinaryExpr(expr: Binary){
+//         return this.parenthesize(expr.operator.lexeme, expr.left, expr.right);
+//     }
 
-    visitGroupingExpr(expr: Grouping){
-        return this.parenthesize("group", expr.expression)
-    }
+//     visitGroupingExpr(expr: Grouping){
+//         return this.parenthesize("group", expr.expression)
+//     }
 
-    visitLiteralExpr(expr: Literal){
-        return expr.Value;
+//     visitLiteralExpr(expr: Literal){
+//         return expr.Value;
 
-    }
+//     }
 
-    visitUnaryExpr(expr: Unary){
-        return this.parenthesize(expr.operator.lexeme, expr.right);
+//     visitUnaryExpr(expr: Unary){
+//         return this.parenthesize(expr.operator.lexeme, expr.right);
 
-    }
+//     }
 
-    visitVariableExpr(){
+//     visitVariableExpr(){
 
-    }
+//     }
 
-    visitVarStmt(){
+//     visitVarStmt(){
 
-    }
+//     }
 
-    visitPrintStmt(){
+//     visitPrintStmt(){
 
 
-    }
+//     }
 
-    visitExpressionStmt(){
-        
-    }
+//     visitExpressionStmt(){
+
+//     }
     
-}
+// }
 
 
-export {ASTPrinter}
+// export {ASTPrinter}

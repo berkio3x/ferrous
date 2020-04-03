@@ -1,4 +1,4 @@
-import {ExprVisitor, Expr, Literal, Grouping, Unary, Binary, Variable} from './Expr';
+import {ExprVisitor, Expr, Literal, Grouping, Unary, Binary, Variable, Assign} from './Expr';
 import {StmtVisitor, Expression, Print, Stmt, Var} from './Stmt';
 import { Token, TokenTypes } from './lexer';
 import {error} from './error';
@@ -39,7 +39,6 @@ class Interpreter implements ExprVisitor, StmtVisitor{
     }
 
     execute(stmt:Stmt){
-        console.log("Executing...", stmt)
         stmt.accept(this);
 
     }
@@ -175,6 +174,12 @@ class Interpreter implements ExprVisitor, StmtVisitor{
 
     visitVariableExpr(expr:Variable){
         return this.env.get(expr.name);
+    }
+
+    visitAssignExpr(expr:Assign){
+        let value:Object = this.evaluate(expr.value);
+        this.env.assign(expr.name.lexeme, value);
+        return value;
     }
 
   

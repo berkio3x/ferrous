@@ -16,11 +16,30 @@ interface Expr{
 }
 interface ExprVisitor {
 
+    visitAssignExpr (vs: Assign ):any ;
     visitBinaryExpr (vs: Binary ):any ;
     visitGroupingExpr (vs: Grouping ):any ;
     visitLiteralExpr (vs: Literal ):any ;
     visitUnaryExpr (vs: Unary ):any ;
     visitVariableExpr (vs: Variable ):any ;
+}
+
+class Assign implements Expr {
+
+    name: Token;
+     value: Expr;
+
+    constructor(name:Token, value:Expr){
+
+		this.name = name;
+		this.value = value;
+
+    }
+
+    accept(vv: ExprVisitor) {
+        return vv.visitAssignExpr(this);
+    }
+
 }
 
 class Binary implements Expr {
@@ -110,6 +129,7 @@ class Variable implements Expr {
 }
 
 export {
+  Assign,
   Binary,
   Grouping,
   Literal,

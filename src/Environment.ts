@@ -1,6 +1,5 @@
 import {Token} from './lexer';
 
-
 class Environment {
 
     values:Map<any, Object>;
@@ -15,13 +14,23 @@ class Environment {
     }
 
     get(name:any):Object{
-        console.log(":))))")
         if(this.values.has(name.lexeme)){
             return this.values.get(name.lexeme)
         }
 
         throw new Error('value not defined.')
 
+    }
+    assign(name:any, value:Object){
+
+      
+
+        if(this.values.has(name)){
+            
+            this.values.set(name, value)
+            return;
+        }
+        throw new Error(`${name} Undefined variable ${name}`);
     }
     
 }

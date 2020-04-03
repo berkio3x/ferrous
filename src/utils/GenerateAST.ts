@@ -199,6 +199,7 @@ let outputDir: string = process.argv[2];
 console.log(outputDir);
 
 let Expressions: Array<string> = [
+  "Assign=>name:Token, value:Expr",
   "Binary=>left:Expr , operator:Token, right:Expr",
   "Grouping=>expression:Expr",
   "Literal=>Value:Object",
