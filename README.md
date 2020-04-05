@@ -4,8 +4,9 @@ Ferrous is a dynamically typed interpreted programming language.
 **The compiler is written in Typescript**
 
 
-#### Goal
-The goal of this project is to incrementaly build a programming language from start to end.
+## Goal
+
+The goal of this project is to incrementaly build a programming language from start to end from scratch and understand the internals of interpreters/compilers ,  **without using any external library for tokenizing / parsing the source**.
 
 ##### 1) Variables.         
 
