@@ -7,8 +7,14 @@ Ferrous is a dynamically typed interpreted programming language.
 #### Goal
 The goal of this project is to incrementaly build a programming language from start to end.
 
+##### 1) Variables.         
 
-1. Scopes
+You can bind a value to a variable using `=` operator.ex.
+```C
+var color = '#FF0000'
+```
+
+##### 2)  Scopes
 ```C
 var a = "global a";
 var b = "global b";
