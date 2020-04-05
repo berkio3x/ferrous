@@ -166,7 +166,8 @@ var Expressions = [
 var Statements = [
     "Expression=>expression:Expr",
     "Print=>expression:Expr",
-    "Var=>name:Token, initializer:Expr"
+    "Var=>name:Token, initializer:Expr",
+    "Block=>statements:Array<Stmt>"
 ];
 GenerateAst(outputDir, "Expr", Expressions, []);
 GenerateAst(outputDir, "Stmt", Statements, ["Expr:./Expr"]);

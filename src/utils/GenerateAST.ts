@@ -82,7 +82,7 @@ This is an auto generated file by using utils/exprGen.ts utility cli program of 
   );
 }
 
-function defineExports(fd: any, baseClassName:string, types: Array<string>) {
+function defineExports(fd: any, baseClassName: string, types: Array<string>) {
   fs.appendFileSync(fd, "export {\n");
   types.forEach((type) => {
     let classNameToExport = type.split("=>")[0].replace(" ", "");
@@ -147,17 +147,17 @@ function defineType(
 }
 
 
-function defineImports(fd:any, deps:Array<string>){
+function defineImports(fd: any, deps: Array<string>) {
 
-    deps.forEach((dep)=>{
-      console.log(dep)
-      let depName:string = dep.split(':')[0];
-      let depPath:string = dep.split(':')[1];
-      fs.appendFileSync(fd, `import {${depName}} from '${depPath}'\n`)
-    })
+  deps.forEach((dep) => {
+    console.log(dep)
+    let depName: string = dep.split(':')[0];
+    let depPath: string = dep.split(':')[1];
+    fs.appendFileSync(fd, `import {${depName}} from '${depPath}'\n`)
+  })
 }
 
-function GenerateAst(outputDir: string, baseClassName: string, ast:Array<string>,deps?:Array<string>) {
+function GenerateAst(outputDir: string, baseClassName: string, ast: Array<string>, deps?: Array<string>) {
   let fileName = `${outputDir}/${baseClassName}.ts`;
   let error = null;
 
@@ -208,11 +208,12 @@ let Expressions: Array<string> = [
 ];
 
 
-let Statements:Array<string> =[
+let Statements: Array<string> = [
   "Expression=>expression:Expr",
   "Print=>expression:Expr",
-  "Var=>name:Token, initializer:Expr"
+  "Var=>name:Token, initializer:Expr",
+  "Block=>statements:Array<Stmt>"
 ]
 
-GenerateAst(outputDir, "Expr", Expressions,[]);
-GenerateAst(outputDir, "Stmt", Statements,["Expr:./Expr"])
+GenerateAst(outputDir, "Expr", Expressions, []);
+GenerateAst(outputDir, "Stmt", Statements, ["Expr:./Expr"])
