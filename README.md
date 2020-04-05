@@ -6,7 +6,7 @@ Ferrous is a dynamically typed interpreted programming language.
 
 ## Goal
 
-The goal of this project is to incrementaly build a programming language from start to end from scratch and understand the internals of interpreters/compilers ,  **without using any external library for tokenizing / parsing the source**.
+The goal of this project is to incrementaly build a programming language  **from scratch** and understand the internals of interpreters/compilers ,  **without using any external library for tokenizing / parsing the source**.
 
 ##### 1) Variables.         
 
