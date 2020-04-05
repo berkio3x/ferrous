@@ -11,7 +11,7 @@ The goal of this project is to incrementaly build a programming language from st
 
 You can bind a value to a variable using `=` operator.ex.
 ```C
-var color = '#FF0000'
+var color = '#FF0000';
 ```
 
 ##### 2)  Scopes
