@@ -1,9 +1,7 @@
 ### Ferrous 🧪
-Ferrous is a ***dynamic programming language***, much like python/javascript.  
+Ferrous is a ***dynamic programming language***, much like python/javascript, written in `Typescript`.    
 
-**The compiler is written in Typescript**
-
-### Features implemented
+##### Features implemented
 
    - [Goal](#goal)       
    - [Variables](#variables)       
