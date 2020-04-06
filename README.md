@@ -14,8 +14,20 @@ You can bind a value to a variable using `=` operator.ex.
 ```C
 var color = '#FF0000';
 ```
+##### 2) Flow control using conditionals.
+```C
 
-##### 2)  Scopes
+var a = 10;
+var b = 20;
+if ( a+b  > 60) {
+  print "yes !";
+} else {
+  print "No !";
+}
+```
+
+
+##### 3)  Scopes
 ```C
 var a = "global a";
 var b = "global b";
