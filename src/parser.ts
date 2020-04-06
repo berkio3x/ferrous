@@ -341,6 +341,7 @@ class Parser {
         while (this.match(TokenTypes.GREATER, TokenTypes.GREATER_EQUAL, TokenTypes.LESS, TokenTypes.LESS_EQUAL)) {
             let operator: Token = this.previous();
             let right: Expr = this.addition();
+
             expr = new Binary(expr, operator, right)
 
         }

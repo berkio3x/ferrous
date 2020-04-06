@@ -20,6 +20,7 @@ var b = 20;
 
 
 if ( a + b  > 60) {
+
   print "yes !";
 } else {
   print "No !";
@@ -39,7 +40,6 @@ console.log("Tokens :\n", tokens, "\n\n")
 let parser = new Parser(tokens);
 let stmts: Array<Stmt> = parser.parse();
 console.log("Statements :\n", JSON.stringify(stmts, null, 3), "\n\n");
-
 let interpreter = new Interpreter()
 interpreter.interpret(stmts)
 

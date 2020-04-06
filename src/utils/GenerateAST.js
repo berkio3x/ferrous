@@ -173,4 +173,3 @@ var Statements = [
 ];
 GenerateAst(outputDir, "Expr", Expressions, []);
 GenerateAst(outputDir, "Stmt", Statements, ["Expr:./Expr"]);
-//# sourceMappingURL=GenerateAST.js.map

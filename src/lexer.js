@@ -270,4 +270,3 @@ function run() {
         console.log(token);
     });
 }
-//# sourceMappingURL=lexer.js.map

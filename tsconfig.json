@@ -1,16 +1,14 @@
-{   
-    
+{
     "compilerOptions": {
-        "sourceMap": true,
+        "sourceMap": false,
         // "lib": ["ESNext"],
         // "target": "ESNext",
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "outDir": "./lib"
     },
-
     "include": [
         "src/**/*"
     ],
-
     "exclude": [
         "node_modules",
         "**/*.spec.ts"
