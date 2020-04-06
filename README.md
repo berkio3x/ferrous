@@ -1,21 +1,38 @@
-# Ferrous 🧪
-Ferrous is a ***dynamic programming language***, much like python/javascript.  
+### Ferrous 🧪
+Ferrous is a ***dynamic programming language***, much like python/javascript, written in `Typescript`.    
 
-**The compiler is written in Typescript**
+##### Features implemented
+
+   - [Goal](#goal)       
+   - [Variables](#variables)       
+   - [Flow control using if else](#flow-control-using-conditionals)       
+   - [Scopes](#scopes)         
 
 
-## Goal
+#### Goal
 
 The goal of this project is to incrementaly build a programming language  **from scratch** and understand the internals of interpreters/compilers ,  **without using any external library for tokenizing / parsing the source**.
 
-##### 1) Variables.         
+#### Variables.         
 
 You can bind a value to a variable using `=` operator.ex.
 ```C
 var color = '#FF0000';
 ```
+#### Flow control using conditionals.
+```C
 
-##### 2)  Scopes
+var a = 10;
+var b = 20;
+if ( a+b  > 60) {
+  print "yes !";
+} else {
+  print "No !";
+}
+```
+
+
+#### Scopes
 ```C
 var a = "global a";
 var b = "global b";
