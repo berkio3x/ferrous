@@ -11,7 +11,10 @@ varDecl        -> "var" IDENTIFIER ("=" expression)? ";" ;
 
 statement      -> exprStmt
                 | printStmt;
+                | ifStmt;
                 | block;
+
+ifStmt         -> "if" "(" expression ")" statement ("else" statement)? ; 
                 
 block           -> "{" declration* "}";
 
@@ -21,7 +24,11 @@ printStmt       -> print expression "  ";"  ;
 expression     -> assignment;
 
 assignment     -> IDENTIFIER "=" assignment;
-            |   | equality;
+                | logic_or;
+
+logic_or       -> logic_and ( "or" logic_and )*;
+logic_and      -> equality ( "and" equality )*;
+
 
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → addition ( ( ">" | ">=" | "<" | "<=" ) addition )* ;
@@ -48,9 +55,9 @@ primary        → NUMBER | STRING | "false" | "true" | "nil"
 
 
 import { Token, TokenTypes } from './lexer';
-import { Expr, Binary, Unary, Literal, Grouping, Variable, Assign } from './Expr';
+import { Expr, Binary, Unary, Literal, Grouping, Variable, Assign, Logical } from './Expr';
 import { error } from './error';
-import { Stmt, Expression, Print, Var, Block } from './Stmt';
+import { Stmt, Expression, Print, Var, Block, If } from './Stmt';
 import { equal } from 'assert';
 
 class ParserError extends Error {
@@ -115,15 +122,41 @@ class Parser {
 
     }
 
+    ifStatement() {
+        this.consume(TokenTypes.LEFT_PAREN, "Expect '(' after 'if'.");
 
+        console.log("xx**")
+        let condition: Expr = this.expression();
+        this.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after 'if' condition.");
+
+        console.log("mmmm...")
+        let thenBranch: Stmt = this.statement();
+
+        console.log(thenBranch, "...")
+
+        let elseBranch: Stmt = null;
+        if (this.match(TokenTypes.ELSE)) {
+            elseBranch = this.statement();
+            console.log(elseBranch, "+++")
+        }
+
+        return new If(condition, thenBranch, elseBranch);
+
+
+
+    }
     statement(): Stmt {
-
+        if (this.match(TokenTypes.IF)) {
+            return this.ifStatement();
+        }
         if (this.match(TokenTypes.PRINT)) {
             return this.printStatement()
         }
         if (this.match(TokenTypes.LEFT_BRACE)) {
             return new Block(this.block())
         }
+
+
         return this.expressionStatement()
     }
 
@@ -174,8 +207,31 @@ class Parser {
     }
 
 
-    assignment(): Expr {
+    and() {
+
         let expr: Expr = this.equality();
+        while (this.match(TokenTypes.AND)) {
+            let op: Token = this.previous();
+            let right: Expr = this.equality();
+            expr = new Logical(expr, op, right);
+        }
+        return expr;
+
+    }
+
+
+    or(): Expr {
+        let expr: Expr = this.and();
+        while (this.match(TokenTypes.OR)) {
+            let op: Token = this.previous();
+            let right: Expr = this.and();
+            expr = new Logical(expr, op, right)
+        }
+        return expr;
+    }
+
+    assignment(): Expr {
+        let expr: Expr = this.or();
         if (this.match(TokenTypes.EQUAL)) {
             let equals: Token = this.previous();
             let value: Expr = this.assignment();
@@ -227,6 +283,7 @@ class Parser {
     }
 
     primary() {
+        console.log("primary")
         if (this.match(TokenTypes.FALSE)) return new Literal(false);
         if (this.match(TokenTypes.TRUE)) return new Literal(true);
         if (this.match(TokenTypes.NIL)) return new Literal(null);
@@ -249,7 +306,6 @@ class Parser {
     }
 
     unary() {
-
         if (this.match(TokenTypes.BANG, TokenTypes.MINUS)) {
             let operator: Token = this.previous();
             let right: Expr = this.unary();
@@ -269,13 +325,14 @@ class Parser {
     }
 
     addition() {
+        console.log("addition")
         let expr: Expr = this.multiplication();
         while (this.match(TokenTypes.MINUS, TokenTypes.PLUS)) {
             let operator: Token = this.previous();
             let right: Expr = this.multiplication()
             expr = new Binary(expr, operator, right)
         }
-
+        console.log(expr, "return additiono()")
         return expr;
     }
 
@@ -287,6 +344,8 @@ class Parser {
             expr = new Binary(expr, operator, right)
 
         }
+
+
         return expr;
     }
 

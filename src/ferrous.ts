@@ -7,29 +7,32 @@ import { Interpreter } from './interpreter';
 import { Stmt } from './Stmt';
 
 
-let scanner = new Scanner(`
 
-var a = "global a";
-var b = "global b";
-var c = "global c";
-{
-  var a = "outer a";
-  var b = "outer b";
-  {
-    var a = "inner a";
-    print a;
-    print b;
-    print c;
-  }
-  print a;
-  print b;
-  print c;
+let source_equality = `print 2 > 4;`
+
+
+
+let source_flow_control = `
+
+var a = 10;
+var b = 20;
+
+
+
+if ( a + b  > 60) {
+  print "yes !";
+} else {
+  print "No !";
 }
-print a;
-print b;
-print c;
+`
 
-`)
+let source_logical_operators = `
+print "hi" or 2;
+print nil or "yes";
+`
+
+
+let scanner = new Scanner(source_flow_control)
 
 let tokens = scanner.scanTokens()
 console.log("Tokens :\n", tokens, "\n\n")

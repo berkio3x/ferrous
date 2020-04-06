@@ -22,6 +22,7 @@ interface ExprVisitor {
     visitLiteralExpr (vs: Literal ):any ;
     visitUnaryExpr (vs: Unary ):any ;
     visitVariableExpr (vs: Variable ):any ;
+    visitLogicalExpr (vs: Logical ):any ;
 }
 
 class Assign implements Expr {
@@ -128,6 +129,26 @@ class Variable implements Expr {
 
 }
 
+class Logical implements Expr {
+
+    left: Expr;
+     operator: Token;
+     right: Expr;
+
+    constructor(left:Expr, operator:Token, right:Expr){
+
+		this.left = left;
+		this.operator = operator;
+		this.right = right;
+
+    }
+
+    accept(vv: ExprVisitor) {
+        return vv.visitLogicalExpr(this);
+    }
+
+}
+
 export {
   Assign,
   Binary,
@@ -135,6 +156,7 @@ export {
   Literal,
   Unary,
   Variable,
+  Logical,
   ExprVisitor,
   Expr
 }

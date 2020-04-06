@@ -1,5 +1,5 @@
-import { ExprVisitor, Expr, Literal, Grouping, Unary, Binary, Variable, Assign } from './Expr';
-import { StmtVisitor, Expression, Print, Stmt, Var, Block } from './Stmt';
+import { ExprVisitor, Expr, Literal, Grouping, Unary, Binary, Variable, Assign, Logical } from './Expr';
+import { StmtVisitor, Expression, Print, Stmt, Var, Block, If } from './Stmt';
 import { Token, TokenTypes } from './lexer';
 import { error } from './error';
 import { Environment } from './Environment';
@@ -173,6 +173,7 @@ class Interpreter implements ExprVisitor, StmtVisitor {
     }
 
     visitVariableExpr(expr: Variable) {
+
         return this.env.get(expr.name);
     }
 
@@ -210,6 +211,33 @@ class Interpreter implements ExprVisitor, StmtVisitor {
             new Environment(this.env)
         )
         return null;
+    }
+
+    visitIfStmt(stm: If) {
+        if (this.isTruthy(this.evaluate(stm.condition))) {
+            this.execute(stm.thenBranch)
+        }
+        else {
+            if (stm.thenBranch != null) {
+                this.execute(stm.elseBranch);
+            }
+        }
+
+        return null;
+
+    }
+
+    visitLogicalExpr(expr: Logical) {
+        let left: Object = this.evaluate(expr.left);
+        if (expr.operator.type == TokenTypes.OR) {
+            if (this.isTruthy(left)) return left;
+
+        } else {
+            if (!this.isTruthy(left)) return left;
+        }
+
+        return this.evaluate(expr.right);
+
     }
 
 

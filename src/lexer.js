@@ -181,6 +181,7 @@ var Scanner = /** @class */ (function () {
                 }
                 else
                     this.addToken(TokenTypes.GREATER);
+                break;
             }
             case '/': {
                 if (this.peek() === '/') {

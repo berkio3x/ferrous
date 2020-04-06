@@ -35,6 +35,7 @@ class Environment {
 
     define(name: any, value: Object) {
         this.values.set(name, value);
+
     }
 
     get(name: any): Object {
