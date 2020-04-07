@@ -28,7 +28,7 @@ def find_tests():
     for path, subdirs, files in os.walk(TEST_DIR):
         for name in files:
             test_file = os.path.join(path, name)
-            if test_file.endswith(".lox"):
+            if test_file.endswith(".ferrous"):
                 tests.append(test_file)
 
     return tests

@@ -1,0 +1,8 @@
+//Test for logical and
+
+print false and 1; // expect: false
+print true and 1; // expect: 1
+print 1 and true and false ; // expect: false
+print nil and 1; // expect: null
+print false and true and true; // expect: false
+print false and false; // expect: false
