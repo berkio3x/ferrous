@@ -1,7 +1,9 @@
 ### Ferrous 🧪
-Ferrous is a `Typescript` port  of `lox` , a ***dynamic programming language***. 
+Ferrous is a `Typescript` port  of `jlox`, a ***dynamic programming language***.  from [crafting interpreters](https://craftinginterpreters.com/).    
 
-Currently it tries to be a one to one port of `lox` but I plan on adding additional features making this lox's superset, wherein all valid `lox` programs will be  valid `ferrous` programs.
+Once i am comfortable implementing additional features into this language , i will re implement `ferrous` with a byte code compiler, until then this port  will remain a `tree walk interpreter`.
+
+Currently it tries to be a one to one port of `jlox` but I plan on adding additional features making this lox's superset, wherein all valid `lox` programs will be  valid `ferrous` programs.
 
 
 #### Goal
