@@ -1,5 +1,8 @@
 ### Ferrous 🧪
-Ferrous is a ***dynamic programming language***, much like python/javascript, written in `Typescript`.    
+Ferrous is a `Typescript` port  of `lox` , a ***dynamic programming language***. 
+
+Currently it tries to be a one to one port of `lox` but I plan on adding additional features making this lox's superset, wherein all valid `lox` programs will be  valid `ferrous` programs.
+
 
 #### Goal
 
