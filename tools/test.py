@@ -68,6 +68,7 @@ def execute_tests(tests):
 
 
 tests = find_tests()
+
 term.writeLine(f"Found {len(tests)} tests to run:", term.cyan, term.underscore)
 passed, failed = execute_tests(tests)
 
