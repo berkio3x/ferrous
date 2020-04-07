@@ -1,5 +1,5 @@
 ### Ferrous 🧪
-Ferrous is a `Typescript` port  of [`Lox`](http://www.craftinginterpreters.com/the-lox-language.html), a ***dynamic programming language***.
+Ferrous is a `Typescript` port  of [Lox](http://www.craftinginterpreters.com/the-lox-language.html), a ***dynamic programming language***.
 
 Once i am comfortable implementing additional features into this language , i will re implement `ferrous` with a byte code compiler, until then this port  will remain a `tree walk interpreter`.
 
