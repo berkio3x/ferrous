@@ -125,19 +125,15 @@ class Parser {
     ifStatement() {
         this.consume(TokenTypes.LEFT_PAREN, "Expect '(' after 'if'.");
 
-        console.log("xx**")
         let condition: Expr = this.expression();
         this.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after 'if' condition.");
 
-        console.log("mmmm...")
         let thenBranch: Stmt = this.statement();
 
-        console.log(thenBranch, "...")
 
         let elseBranch: Stmt = null;
         if (this.match(TokenTypes.ELSE)) {
             elseBranch = this.statement();
-            console.log(elseBranch, "+++")
         }
 
         return new If(condition, thenBranch, elseBranch);
@@ -283,7 +279,6 @@ class Parser {
     }
 
     primary() {
-        console.log("primary")
         if (this.match(TokenTypes.FALSE)) return new Literal(false);
         if (this.match(TokenTypes.TRUE)) return new Literal(true);
         if (this.match(TokenTypes.NIL)) return new Literal(null);
@@ -325,14 +320,12 @@ class Parser {
     }
 
     addition() {
-        console.log("addition")
         let expr: Expr = this.multiplication();
         while (this.match(TokenTypes.MINUS, TokenTypes.PLUS)) {
             let operator: Token = this.previous();
             let right: Expr = this.multiplication()
             expr = new Binary(expr, operator, right)
         }
-        console.log(expr, "return additiono()")
         return expr;
     }
 

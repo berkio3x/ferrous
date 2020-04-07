@@ -1,2 +1,5 @@
 #!/bin/sh
-node lib/ferrous.js
+FILE=$1
+scriptdir="$(dirname "$0")"
+cd "$scriptdir" && node lib/ferrous.js $FILE
+

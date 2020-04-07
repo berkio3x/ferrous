@@ -5,42 +5,27 @@ import { Expr } from './Expr';
 
 import { Interpreter } from './interpreter';
 import { Stmt } from './Stmt';
+import * as fs from 'fs';
 
+let source_file_path: string = process.argv[2]
 
+let source: Buffer;
 
-let source_equality = `print 2 > 4;`
+try {
+  source = fs.readFileSync(source_file_path);
+  let scanner = new Scanner(source.toString());
 
-
-
-let source_flow_control = `
-
-var a = 10;
-var b = 20;
-
-
-
-if ( a + b  > 60) {
-
-  print "yes !";
-} else {
-  print "No !";
+  let tokens = scanner.scanTokens()
+  // console.log("Tokens :\n", tokens, "\n\n")
+  let parser = new Parser(tokens);
+  let stmts: Array<Stmt> = parser.parse();
+  // console.log("Statements :\n", JSON.stringify(stmts, null, 3), "\n\n");
+  let interpreter = new Interpreter()
+  interpreter.interpret(stmts)
+} catch (error) {
+  console.log(error, "Error opening the given source file")
 }
-`
-
-let source_logical_operators = `
-print "hi" or 2;
-print nil or "yes";
-`
 
 
-let scanner = new Scanner(source_flow_control)
-
-let tokens = scanner.scanTokens()
-console.log("Tokens :\n", tokens, "\n\n")
-let parser = new Parser(tokens);
-let stmts: Array<Stmt> = parser.parse();
-console.log("Statements :\n", JSON.stringify(stmts, null, 3), "\n\n");
-let interpreter = new Interpreter()
-interpreter.interpret(stmts)
 
 
