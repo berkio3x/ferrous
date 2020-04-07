@@ -36,9 +36,10 @@ def find_tests():
 
 def execute_tests(tests):
     passed = 0
+    test_statuses = []
 
     for test in tests:
-        print(test)
+
         p = subprocess.Popen(["../ferrous", test], stdout=subprocess.PIPE)
         out = p.communicate()[0]
         out = out.split(b"\n")
@@ -50,16 +51,27 @@ def execute_tests(tests):
 
         expected_outs = get_expected_output(test)
 
+        for x, y in zip(out, expected_outs):
+            if x != y:
+                test_statuses.append((test, term.red))
+                test_statuses.append((f"Expected [{y}] but got [{x}]", term.yellow))
+
         if expected_outs == out:
+            test_statuses.append((test, term.green))
+
             passed += 1
+
+    # display status of all individual tests on stdout
+    for test, color in test_statuses:
+        term.writeLine(test, color)
     return (passed, len(tests) - passed)
 
 
 tests = find_tests()
-term.writeLine(f"Found {len(tests)} tests to run:", term.cyan)
+term.writeLine(f"Found {len(tests)} tests to run:", term.cyan, term.underscore)
 passed, failed = execute_tests(tests)
 
+term.writeLine(f"\n\nTest summary", term.cyan, term.underscore)
 term.writeLine(f"Tests passed :[{passed}] ", term.green)
 term.writeLine(f"Tests failed :[{failed}] ", term.red)
-# print(tests, "..")
 
