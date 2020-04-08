@@ -58,7 +58,7 @@ while (a < 10){
 // prints from 0...9
 
 ```
-2. while with single expressionbody
+2. while with single expression body
 
 ```C
 var c = 0;
