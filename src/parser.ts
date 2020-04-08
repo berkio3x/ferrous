@@ -11,12 +11,17 @@ varDecl        -> "var" IDENTIFIER ("=" expression)? ";" ;
 
 statement      -> exprStmt
                 | printStmt;
+                | forStmt;
                 | ifStmt;
                 | whileStmt;
                 | block;
 
 ifStmt         -> "if" "(" expression ")" statement ("else" statement)? ; 
                 
+forstmt        ->  "for" "(" ( valDec | exprStmt | ";" )
+                      expression? ";"
+                      expression? ";" statement ;
+
 WhileStmt      -> "while" "(" expression ")" statement;
 
 block           -> "{" declration* "}";
@@ -154,7 +159,52 @@ class Parser {
         return new While(condition, body)
     }
 
+    forStatement() {
+        this.consume(TokenTypes.LEFT_PAREN, "Expect '(' after for.");
+        let initializer: Stmt;
+
+        if (this.match(TokenTypes.SEMICOLON)) {
+            initializer = null;
+        } else if (this.match(TokenTypes.VAR)) {
+            initializer = this.valDeclration();
+
+        } else {
+            initializer = this.expressionStatement();
+        }
+
+        let condition: Expr = null;
+        if (!this.check(TokenTypes.SEMICOLON)) {
+            condition = this.expression();
+
+        }
+        this.consume(TokenTypes.SEMICOLON, "Expect ';' after loop condition.");
+
+        let increment: Expr = null;
+        if (!this.check(TokenTypes.RIGHT_PAREN)) {
+            increment = this.expression();
+        }
+        this.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after for clauses.");
+
+        let body: Stmt = this.statement();
+
+        if (increment != null) {
+            body = new Block([body, new Expression(increment)])
+        }
+
+        if (condition == null) condition = new Literal(true);
+        body = new While(condition, body);
+
+        if (initializer != null) {
+            body = new Block([initializer, body])
+        }
+
+        return body;
+    }
+
     statement(): Stmt {
+        if (this.match(TokenTypes.FOR)) {
+            return this.forStatement();
+        }
         if (this.match(TokenTypes.IF)) {
             return this.ifStatement();
         }
