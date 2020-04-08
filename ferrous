@@ -1,5 +1,4 @@
 #!/bin/sh
-FILE=$1
 scriptdir="$(dirname "$0")"
-cd "$scriptdir" && node lib/ferrous.js $FILE
+cd "$scriptdir" && node lib/ferrous.js "$@" 
 

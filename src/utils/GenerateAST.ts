@@ -214,7 +214,8 @@ let Statements: Array<string> = [
   "Print=>expression:Expr",
   "Var=>name:Token, initializer:Expr",
   "Block=>statements:Array<Stmt>",
-  "If=>condition:Expr, thenBranch:Stmt, elseBranch:Stmt"
+  "If=>condition:Expr, thenBranch:Stmt, elseBranch:Stmt",
+  "While=>condition:Expr, body:Stmt",
 ]
 
 GenerateAst(outputDir, "Expr", Expressions, []);

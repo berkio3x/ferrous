@@ -1,5 +1,5 @@
 import { ExprVisitor, Expr, Literal, Grouping, Unary, Binary, Variable, Assign, Logical } from './Expr';
-import { StmtVisitor, Expression, Print, Stmt, Var, Block, If } from './Stmt';
+import { StmtVisitor, Expression, Print, Stmt, Var, Block, If, While } from './Stmt';
 import { Token, TokenTypes } from './lexer';
 import { error } from './error';
 import { Environment } from './Environment';
@@ -73,6 +73,7 @@ class Interpreter implements ExprVisitor, StmtVisitor {
         throw new RuntimeError(operator, `Operands must be a numbers `)
     }
 
+
     visitBinaryExpr(expr: Binary) {
         let left: Object = this.evaluate(expr.left)
         let right: Object = this.evaluate(expr.right)
@@ -92,6 +93,8 @@ class Interpreter implements ExprVisitor, StmtVisitor {
                 return Number(left) * Number(right);
 
             case TokenTypes.PLUS:
+
+                // console.log(left, right)
                 if (typeof left == "number" && typeof right == "number")
                     return Number(left) + Number(right)
                 if (typeof left == "string" && typeof right == "string")
@@ -238,6 +241,14 @@ class Interpreter implements ExprVisitor, StmtVisitor {
 
         return this.evaluate(expr.right);
 
+    }
+
+    visitWhileStmt(stmt: While) {
+        while (this.isTruthy(this.evaluate(stmt.condition))) {
+
+            this.execute(stmt.body);
+        }
+        return null;
     }
 
 

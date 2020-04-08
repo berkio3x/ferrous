@@ -1,0 +1,16 @@
+var a = 10; 
+var b = 0; 
+var c = 2 + 10 ; 
+var d = a + b;
+
+print a; // expect: 10
+print b; // expect: 0
+print c; // expect: 12
+print d; // expect: 10
+
+//check reassignments
+a = 100; 
+print a;
+// expect: 100
+
+

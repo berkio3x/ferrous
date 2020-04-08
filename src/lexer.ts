@@ -78,7 +78,7 @@ class Scanner {
     addToken(type: TokenTypes, literal?: Object) {
 
         let text: string = this.source.substring(this.start, this.current)
-        if (literal) {
+        if (literal != null) {
             this.tokens.push(new Token(type, text, literal, this.line))
         }
         else {
@@ -205,7 +205,6 @@ class Scanner {
                         }
                     }
                     let value: string = this.source.substring(this.start, this.current)
-
                     this.addToken(TokenTypes.NUMBER, Number(value))
 
                 }

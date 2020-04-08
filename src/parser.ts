@@ -12,10 +12,13 @@ varDecl        -> "var" IDENTIFIER ("=" expression)? ";" ;
 statement      -> exprStmt
                 | printStmt;
                 | ifStmt;
+                | whileStmt;
                 | block;
 
 ifStmt         -> "if" "(" expression ")" statement ("else" statement)? ; 
                 
+WhileStmt      -> "while" "(" expression ")" statement;
+
 block           -> "{" declration* "}";
 
 exprStmt        -> expression ";" ;
@@ -57,8 +60,9 @@ primary        → NUMBER | STRING | "false" | "true" | "nil"
 import { Token, TokenTypes } from './lexer';
 import { Expr, Binary, Unary, Literal, Grouping, Variable, Assign, Logical } from './Expr';
 import { error } from './error';
-import { Stmt, Expression, Print, Var, Block, If } from './Stmt';
+import { Stmt, Expression, Print, Var, Block, If, While } from './Stmt';
 import { equal } from 'assert';
+import { throwStatement } from '@babel/types';
 
 class ParserError extends Error {
     constructor(message?: string) {
@@ -141,9 +145,21 @@ class Parser {
 
 
     }
+
+    whileStatement(): Stmt {
+        this.consume(TokenTypes.LEFT_PAREN, "Expect '(' after 'while'.");
+        let condition: Expr = this.expression();
+        this.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after 'while condition'.")
+        let body: Stmt = this.statement();
+        return new While(condition, body)
+    }
+
     statement(): Stmt {
         if (this.match(TokenTypes.IF)) {
             return this.ifStatement();
+        }
+        if (this.match(TokenTypes.WHILE)) {
+            return this.whileStatement();
         }
         if (this.match(TokenTypes.PRINT)) {
             return this.printStatement()
@@ -191,6 +207,8 @@ class Parser {
         if (this.isAtEnd()) return false;
         return this.peek().type == type
     }
+
+
 
     match(...tokentypes: Array<TokenTypes>) {
         for (let i = 0; i < tokentypes.length; i++) {
@@ -283,8 +301,9 @@ class Parser {
         if (this.match(TokenTypes.TRUE)) return new Literal(true);
         if (this.match(TokenTypes.NIL)) return new Literal(null);
 
-        if (this.match(TokenTypes.NUMBER, TokenTypes.STRING))
+        if (this.match(TokenTypes.NUMBER, TokenTypes.STRING)) {
             return new Literal(this.previous().literal);
+        }
 
         if (this.match(TokenTypes.LEFT_PAREN)) {
             let expr: Expr = this.expression();

@@ -22,6 +22,7 @@ interface StmtVisitor {
     visitVarStmt (vs: Var ):any ;
     visitBlockStmt (vs: Block ):any ;
     visitIfStmt (vs: If ):any ;
+    visitWhileStmt (vs: While ):any ;
 }
 
 class Expression implements Stmt {
@@ -110,12 +111,31 @@ class If implements Stmt {
 
 }
 
+class While implements Stmt {
+
+    condition: Expr;
+     body: Stmt;
+
+    constructor(condition:Expr, body:Stmt){
+
+		this.condition = condition;
+		this.body = body;
+
+    }
+
+    accept(vv: StmtVisitor) {
+        return vv.visitWhileStmt(this);
+    }
+
+}
+
 export {
   Expression,
   Print,
   Var,
   Block,
   If,
+  While,
   StmtVisitor,
   Stmt
 }
