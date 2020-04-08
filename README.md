@@ -13,8 +13,10 @@ The goal of this project is to incrementaly build a programming language  **from
 
 - [Building & running ferrous](#build-and-run)       
 - [Variables](#variables)       
-- [Flow control using if else](#flow-control-using-conditionals)       
-- [Scopes](#scopes)         
+- [Flow control using if else](#flow-control-using-conditionals)  
+- [Flow control using while loop](#while)
+- [Scopes](#scopes)     
+
 
 
 
@@ -45,6 +47,24 @@ if ( a+b  > 60) {
 }
 ```
 
+#### While
+1. while with block of statements
+```C
+var a = 0;
+while (a < 10){
+    print a;
+    a = a + 1;
+}
+// prints from 0...9
+
+```
+2. while with single expressionbody
+
+```C
+var c = 0;
+while (c < 3) print c = c + 1;
+// prints 1...3
+```
 
 #### Scopes
 ```C
