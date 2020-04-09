@@ -12,9 +12,11 @@ The goal of this project is to incrementaly build a programming language  **from
 
 
 - [Building & running ferrous](#build-and-run)       
-- [Variables](#variables)       
-- [Flow control using if else](#flow-control-using-conditionals)  
-- [Flow control using while loop](#while)
+- [Variables](#variables)
+- Flow Control
+  * [Conditionals using if else](#flow-control-using-conditionals)  
+  * [while loop](#while)
+  * [for loop](#for)
 - [Scopes](#scopes)     
 
 
@@ -65,6 +67,21 @@ var c = 0;
 while (c < 3) print c = c + 1;
 // prints 1...3
 ```
+
+#### For
+1. Using single expression body.
+```C
+for (var i = 0; i < 10; i = i + 1) print i;
+// 0..9
+```
+
+2. Using block statements
+```C
+for (var i = 0; i < 10; i = i + 1){
+  print i;
+}
+```
+
 
 #### Scopes
 ```C
