@@ -1,15 +1,12 @@
 ### Ferrous 🧪
 Ferrous is a [Typescript](https://www.typescriptlang.org/) port  of [Lox](http://www.craftinginterpreters.com/the-lox-language.html), a ***dynamic programming language***.
 
-Once I am comfortable implementing additional features into this language , I will re implement `ferrous` with a byte code compiler, until then this port  will remain a `tree walk interpreter`.
+Once I am done with adding  features into this language , I will re implement `ferrous` with a byte code compiler, until then this port  will remain a `tree walk interpreter`.
 
 Currently it tries to be a one to one port of `jlox` but I plan on adding additional features making this lox's superset, wherein all valid `lox` programs will be  valid `ferrous` programs.
 
 
-#### Goal
-
-The goal of this project is to incrementaly build a programming language  **from scratch** and understand the internals of interpreters/compilers ,  **without using any external library for tokenizing / parsing the source**.
-
+### Intoduction to ferrous
 
 - [Building & running ferrous](#build-and-run)       
 - [Variables](#variables)
@@ -17,6 +14,8 @@ The goal of this project is to incrementaly build a programming language  **from
   * [Conditionals using if else](#flow-control-using-conditionals)  
   * [while loop](#while)
   * [for loop](#for)
+- Functions
+  * [syntax](#function)
 - [Scopes](#scopes)     
 
 
@@ -80,6 +79,16 @@ for (var i = 0; i < 10; i = i + 1) print i;
 for (var i = 0; i < 10; i = i + 1){
   print i;
 }
+```
+
+#### Function
+
+
+```C
+fun sayHi(msg){
+    print msg;
+}
+sayHi("hello world");
 ```
 
 
