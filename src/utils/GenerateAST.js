@@ -163,9 +163,11 @@ var Expressions = [
     "Unary=>operator:Token, right: Expr",
     "Variable=>name:Token",
     "Logical=>left:Expr, operator:Token, right:Expr",
+    "Call=>callee:Expr, paren:Token, args:Array<Expr>",
 ];
 var Statements = [
     "Expression=>expression:Expr",
+    "Funct=>name:Token, params:Array<Token>, body:Array<Stmt>",
     "Print=>expression:Expr",
     "Var=>name:Token, initializer:Expr",
     "Block=>statements:Array<Stmt>",

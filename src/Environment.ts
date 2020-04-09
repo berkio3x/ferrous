@@ -39,6 +39,7 @@ class Environment {
     }
 
     get(name: any): Object {
+
         if (this.values.has(name.lexeme)) {
 
             return this.values.get(name.lexeme)

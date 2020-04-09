@@ -4,8 +4,15 @@ A Recursive descent parser for the following Grammar.
 
 
 program        -> statement* EOF;
-declration          -> varDecl 
+declration     -> funcDecl
+                | varDecl 
                 | statement;
+
+funcDecl       -> "fun" function;
+
+function       -> IDENTIFIER "(" parameters? ")" block;
+parameters     -> IDENTIFIER ("," IDENTIFIER)* ;
+
 
 varDecl        -> "var" IDENTIFIER ("=" expression)? ";" ;
 
@@ -42,8 +49,14 @@ equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → addition ( ( ">" | ">=" | "<" | "<=" ) addition )* ;
 addition       → multiplication ( ( "-" | "+" ) multiplication )* ;
 multiplication → unary ( ( "/" | "*" ) unary )* ;
-unary          → ( "!" | "-" ) unary
-               | primary ;
+
+
+unary          → ( "!" | "-" ) unary | call;
+
+call           ->primary ( "(" arguments ")" )*;
+
+arguments      ->expression ("," expression)*;
+      
 primary        → NUMBER | STRING | "false" | "true" | "nil"
                | "(" expression ")" | IDENTIFIER ;
      
@@ -63,11 +76,12 @@ primary        → NUMBER | STRING | "false" | "true" | "nil"
 
 
 import { Token, TokenTypes } from './lexer';
-import { Expr, Binary, Unary, Literal, Grouping, Variable, Assign, Logical } from './Expr';
+import { Expr, Binary, Unary, Literal, Grouping, Variable, Assign, Logical, Call } from './Expr';
 import { error } from './error';
 import { Stmt, Expression, Print, Var, Block, If, While } from './Stmt';
 import { equal } from 'assert';
 import { throwStatement } from '@babel/types';
+import { Funct } from './Stmt';
 
 class ParserError extends Error {
     constructor(message?: string) {
@@ -95,8 +109,29 @@ class Parser {
 
     }
 
+    func(kind: string): Funct {
+        let name: Token = this.consume(TokenTypes.IDENTIFIER, "expect" + kind + "name.");
+        this.consume(TokenTypes.LEFT_PAREN, "Expect '(' after" + kind + "name.");
+        let params: Array<Token> = [];
+        if (!this.check(TokenTypes.RIGHT_PAREN)) {
+            do {
+                if (params.length > 255)
+                    this.error(this.peek(), "Cannot have more than 255 arguments.")
+                params.push(this.consume(TokenTypes.IDENTIFIER, "Expect parameter name."))
+            } while (this.match(TokenTypes.COMMA))
+        }
+        this.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after function paramaters.")
+        this.consume(TokenTypes.LEFT_BRACE, "expect '{' before" + kind + "body.");
+        let body: Array<Stmt> = this.block();
+        return new Funct(name, params, body);
+
+    }
+
+
+
     declaration(): Stmt {
         try {
+            if (this.match(TokenTypes.FUN)) return this.func("function");
             if (this.match(TokenTypes.VAR)) return this.valDeclration();
             return this.statement();
         }
@@ -369,13 +404,46 @@ class Parser {
 
     }
 
+    finishCall(callee: Expr): Expr {
+        let args: Array<Expr> = [];
+        if (!this.check(TokenTypes.RIGHT_PAREN)) {
+            do {
+                // cant hvae more than 255 arguments? you ask why? i am not yet experienced to answer this..
+                if (args.length >= 255) {
+                    this.error(this.peek(), "Cannot have more than 255 Arguments.")
+                }
+                args.push(this.expression())
+            } while (this.match(TokenTypes.COMMA))
+        }
+
+        let paren: Token = this.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after function arguments.")
+        return new Call(callee, paren, args)
+
+    }
+
+
+    call(): Expr {
+        let expr: Expr = this.primary();
+        while (true) {
+            if (this.match(TokenTypes.LEFT_PAREN)) {
+                expr = this.finishCall(expr);
+
+            }
+            else {
+                break;
+            }
+        }
+        return expr;
+    }
+
+
     unary() {
         if (this.match(TokenTypes.BANG, TokenTypes.MINUS)) {
             let operator: Token = this.previous();
             let right: Expr = this.unary();
             return new Unary(operator, right)
         }
-        return this.primary()
+        return this.call();
     }
 
     multiplication() {

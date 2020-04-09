@@ -1,8 +1,12 @@
-import { ExprVisitor, Expr, Literal, Grouping, Unary, Binary, Variable, Assign, Logical } from './Expr';
+import { ExprVisitor, Expr, Literal, Grouping, Unary, Binary, Variable, Assign, Logical, Call } from './Expr';
 import { StmtVisitor, Expression, Print, Stmt, Var, Block, If, While } from './Stmt';
 import { Token, TokenTypes } from './lexer';
 import { error } from './error';
 import { Environment } from './Environment';
+import { FerrousCallable } from './FerrousCallable';
+import { Clock } from './nativeFunctions';
+import { FerrousFunction } from './FerrousFunction';
+import { Funct } from './Stmt';
 
 class RuntimeError extends Error {
     token: Token;
@@ -21,7 +25,13 @@ function runtimeError(error: RuntimeError) {
 
 class Interpreter implements ExprVisitor, StmtVisitor {
 
+    globals: Environment = new Environment();
     env: Environment = new Environment();
+
+    constructor() {
+        this.globals.define("clock", new Clock())
+    }
+
 
     interpret(stmts: Array<Stmt>) {
         try {
@@ -130,7 +140,6 @@ class Interpreter implements ExprVisitor, StmtVisitor {
 
 
     }
-
 
     visitGroupingExpr(expr: Grouping) {
         return this.evaluate(expr.expression)
@@ -251,6 +260,26 @@ class Interpreter implements ExprVisitor, StmtVisitor {
         return null;
     }
 
+    visitCallExpr(expr: Call) {
+
+
+        let callee: Object = this.evaluate(expr.callee);
+
+        let args: Array<Expr> = [];
+
+        expr.args.forEach((arg) => {
+            args.push(this.evaluate(arg));
+        })
+
+        let func: FerrousCallable = <FerrousCallable>callee;
+        return func.call(this, args)
+    }
+
+    visitFunctStmt(stmt: Funct) {
+        let fc: FerrousFunction = new FerrousFunction(stmt);
+        this.env.define(stmt.name.lexeme, fc);
+        return null;
+    }
 
 }
 

@@ -23,6 +23,7 @@ interface ExprVisitor {
     visitUnaryExpr (vs: Unary ):any ;
     visitVariableExpr (vs: Variable ):any ;
     visitLogicalExpr (vs: Logical ):any ;
+    visitCallExpr (vs: Call ):any ;
 }
 
 class Assign implements Expr {
@@ -149,6 +150,26 @@ class Logical implements Expr {
 
 }
 
+class Call implements Expr {
+
+    callee: Expr;
+     paren: Token;
+     args: Array<Expr>;
+
+    constructor(callee:Expr, paren:Token, args:Array<Expr>){
+
+		this.callee = callee;
+		this.paren = paren;
+		this.args = args;
+
+    }
+
+    accept(vv: ExprVisitor) {
+        return vv.visitCallExpr(this);
+    }
+
+}
+
 export {
   Assign,
   Binary,
@@ -157,6 +178,7 @@ export {
   Unary,
   Variable,
   Logical,
+  Call,
   ExprVisitor,
   Expr
 }
