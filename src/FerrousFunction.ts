@@ -2,6 +2,7 @@ import { FerrousCallable } from './FerrousCallable';
 import { Funct } from './Stmt';
 import { Interpreter } from './interpreter';
 import { Environment } from './Environment';
+import { RetrunException } from './ReturnException';
 
 
 class FerrousFunction implements FerrousCallable {
@@ -20,7 +21,16 @@ class FerrousFunction implements FerrousCallable {
         for (var i = 0; i < this.declaration.params.length; i++) {
             env.define(this.declaration.params[i].lexeme, args[i]);
         }
-        interpreter.executeBlock(this.declaration.body, env);
+
+        // catch the returnException here to unwind the stack in case of return statements;
+        try {
+            interpreter.executeBlock(this.declaration.body, env);
+        } catch (value) {
+            if (value instanceof RetrunException)
+                return value.value;
+        }
+
+        // if there is no return value , return  null value by default
         return null;
     }
 

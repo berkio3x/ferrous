@@ -173,6 +173,7 @@ var Statements = [
     "Block=>statements:Array<Stmt>",
     "If=>condition:Expr, thenBranch:Stmt, elseBranch:Stmt",
     "While=>condition:Expr, body:Stmt",
+    "Return=>value:Expr, keyword:Token",
 ];
 GenerateAst(outputDir, "Expr", Expressions, []);
 GenerateAst(outputDir, "Stmt", Statements, ["Expr:./Expr"]);

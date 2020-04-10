@@ -1,6 +1,5 @@
-fun demo(a){
-    print a;
+fun demo() {
+    return 10;
 }
 
-demo(20);
-
+demo();
