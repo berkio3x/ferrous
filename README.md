@@ -105,7 +105,10 @@ print msg; // Hi
 If a return statement is missing in the function declaration `null` is returned by default.
 ```C
 
-fun calculate() { print 10+20; // No return statement here }
+fun calculate() {
+    print 10+20;
+    // No return statement here
+}
 var value = demo();
 print value; // null
 ```
