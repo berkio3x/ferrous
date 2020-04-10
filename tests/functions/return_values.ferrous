@@ -1,0 +1,14 @@
+fun demo() {
+    return 10;
+}
+
+var a = demo();
+print a; // expect: 10
+
+fun nullTest(){
+    
+}
+
+
+var a = nullTest();
+print a; // expect: nullTest
