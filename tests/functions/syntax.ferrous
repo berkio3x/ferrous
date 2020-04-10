@@ -1,0 +1,14 @@
+fun demo(a){
+    print a;
+}
+
+demo(10); // expect: 10
+
+
+// No arguments
+
+fun demo(){
+    print 12;
+}
+
+demo(); // expect: 12

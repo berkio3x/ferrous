@@ -13,6 +13,7 @@ class FerrousFunction implements FerrousCallable {
     }
 
     call(interpreter: Interpreter, args: Array<Object>): Object {
+
         let env: Environment = new Environment(interpreter.globals);
         for (var i = 0; i < this.declaration.params.length; i++) {
             env.define(this.declaration.params[i].lexeme, args[i]);
