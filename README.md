@@ -16,6 +16,8 @@ Currently it tries to be a one to one port of `jlox` but I plan on adding additi
   * [for loop](#for)
 - Functions
   * [syntax](#function)
+  * [return values](#function-return-values)
+  * [Implicit return value](#function-implicit-return-value)
 - [Scopes](#scopes)     
 
 
@@ -83,7 +85,7 @@ for (var i = 0; i < 10; i = i + 1){
 
 #### Function
 
-
+1. ##### Function syntax
 ```C
 fun sayHi(msg){
     print msg;
@@ -91,6 +93,22 @@ fun sayHi(msg){
 sayHi("hello world");
 ```
 
+2. ##### Function return values
+```C
+
+fun sayHi() { return "Hi"; }
+var msg = demo();
+print msg; // Hi
+```
+
+3. ##### Function implicit return value.
+If a return statement is missing in the function declaration `null` is returned by default.
+```C
+
+fun calculate() { print 10+20; // No return statement here }
+var value = demo();
+print value; // null
+```
 
 #### Scopes
 ```C
