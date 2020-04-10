@@ -2,4 +2,5 @@ fun demo(a){
     print a;
 }
 
-demo(10); // expect : 10
+demo(20);
+

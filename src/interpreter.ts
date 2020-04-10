@@ -271,7 +271,23 @@ class Interpreter implements ExprVisitor, StmtVisitor {
             args.push(this.evaluate(arg));
         })
 
+
+        // TODO: might need to work on this , 
+        // check instance compability with FerrousCallable instead of FerrousFunction.
+        if (!(callee instanceof FerrousFunction)) {
+            throw new RuntimeError(expr.paren, "Can only call functions and classes.")
+        }
+
+
         let func: FerrousCallable = <FerrousCallable>callee;
+
+        // Validate for function arity
+        if (args.length != func.arity()) {
+            throw new RuntimeError(expr.paren, "🦠Expected " +
+                func.arity() + " arguments but got " +
+                args.length + ".");
+        }
+
         return func.call(this, args)
     }
 

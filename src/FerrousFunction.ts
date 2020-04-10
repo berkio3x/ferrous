@@ -12,6 +12,8 @@ class FerrousFunction implements FerrousCallable {
         this.declaration = declaration;
     }
 
+    arity(): number { return this.declaration.params.length; }
+
     call(interpreter: Interpreter, args: Array<Object>): Object {
 
         let env: Environment = new Environment(interpreter.globals);
