@@ -1,5 +1,5 @@
 import { ExprVisitor, Expr, Literal, Grouping, Unary, Binary, Variable, Assign, Logical, Call } from './Expr';
-import { StmtVisitor, Expression, Print, Stmt, Var, Block, If, While } from './Stmt';
+import { StmtVisitor, Expression, Print, Stmt, Var, Block, If, While, Return } from './Stmt';
 import { Token, TokenTypes } from './lexer';
 import { error } from './error';
 import { Environment } from './Environment';
@@ -7,6 +7,9 @@ import { FerrousCallable } from './FerrousCallable';
 import { Clock } from './nativeFunctions';
 import { FerrousFunction } from './FerrousFunction';
 import { Funct } from './Stmt';
+import { RetrunException } from './ReturnException';
+
+
 
 class RuntimeError extends Error {
     token: Token;
@@ -208,8 +211,15 @@ class Interpreter implements ExprVisitor, StmtVisitor {
                 this.execute(stmt)
             })
         } catch (error) {
-            console.log("🔥🔥🔥 Error 🔥 happened")
-            console.log(error)
+            if (!(error instanceof RetrunException)) {
+                console.log("🔥🔥🔥 Error 🔥 happened")
+                console.log(error)
+            }
+            else {
+
+                throw error
+
+            }
         }
         finally {
             this.env = previous;
@@ -295,6 +305,18 @@ class Interpreter implements ExprVisitor, StmtVisitor {
         let fc: FerrousFunction = new FerrousFunction(stmt);
         this.env.define(stmt.name.lexeme, fc);
         return null;
+    }
+
+    visitReturnStmt(stmt: Return) {
+        let value: Object = null;
+        if (stmt.value != null) {
+            value = this.evaluate(stmt.value);
+        }
+
+        // use exception to  unwind the stack.
+        // retunr statement could be called at any depth during fucntion execution.
+
+        throw new RetrunException(value);
     }
 
 }

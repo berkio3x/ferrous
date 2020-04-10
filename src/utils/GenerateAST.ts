@@ -220,6 +220,7 @@ let Statements: Array<string> = [
   "Block=>statements:Array<Stmt>",
   "If=>condition:Expr, thenBranch:Stmt, elseBranch:Stmt",
   "While=>condition:Expr, body:Stmt",
+  "Return=>value:Expr, keyword:Token",
 ]
 
 GenerateAst(outputDir, "Expr", Expressions, []);

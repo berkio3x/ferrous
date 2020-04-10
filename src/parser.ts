@@ -18,10 +18,14 @@ varDecl        -> "var" IDENTIFIER ("=" expression)? ";" ;
 
 statement      -> exprStmt
                 | printStmt;
+                | returnStmt;
                 | forStmt;
                 | ifStmt;
                 | whileStmt;
                 | block;
+
+
+retrunStmt     -> "return" expression? ";"
 
 ifStmt         -> "if" "(" expression ")" statement ("else" statement)? ; 
                 
@@ -78,7 +82,7 @@ primary        → NUMBER | STRING | "false" | "true" | "nil"
 import { Token, TokenTypes } from './lexer';
 import { Expr, Binary, Unary, Literal, Grouping, Variable, Assign, Logical, Call } from './Expr';
 import { error } from './error';
-import { Stmt, Expression, Print, Var, Block, If, While } from './Stmt';
+import { Stmt, Expression, Print, Var, Block, If, While, Return } from './Stmt';
 import { equal } from 'assert';
 import { throwStatement } from '@babel/types';
 import { Funct } from './Stmt';
@@ -233,10 +237,25 @@ class Parser {
             body = new Block([initializer, body])
         }
 
+
         return body;
     }
 
+    returnStatement(): Stmt {
+        let keyword: Token = this.previous();
+        let value: Expr = null;
+        if (!this.check(TokenTypes.SEMICOLON)) {
+            value = this.expression();
+        }
+        this.consume(TokenTypes.SEMICOLON, "Expect ';' after return value.")
+        return new Return(value, keyword);
+    }
+
     statement(): Stmt {
+
+        if (this.match(TokenTypes.RETURN)) {
+            return this.returnStatement();
+        }
         if (this.match(TokenTypes.FOR)) {
             return this.forStatement();
         }
@@ -382,6 +401,7 @@ class Parser {
     }
 
     primary() {
+
         if (this.match(TokenTypes.FALSE)) return new Literal(false);
         if (this.match(TokenTypes.TRUE)) return new Literal(true);
         if (this.match(TokenTypes.NIL)) return new Literal(null);
