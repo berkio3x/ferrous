@@ -113,6 +113,7 @@ class Parser {
 
     }
 
+    // parse function declaration and return a node of type Funct.
     func(kind: string): Funct {
         let name: Token = this.consume(TokenTypes.IDENTIFIER, "expect" + kind + "name.");
         this.consume(TokenTypes.LEFT_PAREN, "Expect '(' after" + kind + "name.");
@@ -128,9 +129,7 @@ class Parser {
         this.consume(TokenTypes.LEFT_BRACE, "expect '{' before" + kind + "body.");
         let body: Array<Stmt> = this.block();
         return new Funct(name, params, body);
-
     }
-
 
 
     declaration(): Stmt {

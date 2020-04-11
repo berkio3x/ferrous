@@ -24,6 +24,7 @@ try {
   let parser = new Parser(tokens);
   let stmts: Array<Stmt> = parser.parse();
   if (debug) console.log("Statements :\n", JSON.stringify(stmts, null, 3), "\n\n");
+
   let interpreter = new Interpreter()
   interpreter.interpret(stmts)
 } catch (error) {

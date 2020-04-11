@@ -21,8 +21,8 @@ class FerrousFunction implements FerrousCallable {
         for (var i = 0; i < this.declaration.params.length; i++) {
             env.define(this.declaration.params[i].lexeme, args[i]);
         }
-
         // catch the returnException here to unwind the stack in case of return statements;
+
 
         try {
             interpreter.executeBlock(this.declaration.body, env);

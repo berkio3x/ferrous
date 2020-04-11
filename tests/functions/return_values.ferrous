@@ -11,4 +11,4 @@ fun nullTest(){
 
 
 var a = nullTest();
-print a; // expect: nullTest
+print a; // expect: null

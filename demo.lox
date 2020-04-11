@@ -1,6 +1,8 @@
-fun demo() {
-    return 10;
-}
+fun count(n){
+    if (n <= 10) {
+        print n;
+        return count(n + 1);
 
-var a = demo();
-print a;
+    }
+}
+count(1);

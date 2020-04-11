@@ -26,10 +26,12 @@ function runtimeError(error: RuntimeError) {
 }
 
 
-class Interpreter implements ExprVisitor, StmtVisitor {
+class Interpreter implements ExprVisitor,
+    StmtVisitor {
 
     globals: Environment = new Environment();
-    env: Environment = new Environment();
+    env: Environment = this.globals;
+
 
     constructor() {
         this.globals.define("clock", new Clock())
@@ -52,6 +54,7 @@ class Interpreter implements ExprVisitor, StmtVisitor {
     }
 
     execute(stmt: Stmt) {
+
         stmt.accept(this);
 
     }
@@ -200,8 +203,6 @@ class Interpreter implements ExprVisitor, StmtVisitor {
         return value;
     }
 
-
-
     executeBlock(stmts: Array<Stmt>, environment: Environment) {
         let previous: Environment = this.env;
 
@@ -210,6 +211,7 @@ class Interpreter implements ExprVisitor, StmtVisitor {
             stmts.forEach(stmt => {
                 this.execute(stmt)
             })
+
         } catch (error) {
             if (!(error instanceof RetrunException)) {
                 console.log("🔥🔥🔥 Error 🔥 happened")
@@ -270,18 +272,14 @@ class Interpreter implements ExprVisitor, StmtVisitor {
         return null;
     }
 
+    // Define how to evaluate a function call Node.
     visitCallExpr(expr: Call) {
-
-
         let callee: Object = this.evaluate(expr.callee);
-
         let args: Array<Expr> = [];
 
         expr.args.forEach((arg) => {
             args.push(this.evaluate(arg));
         })
-
-
         // TODO: might need to work on this , 
         // check instance compability with FerrousCallable instead of FerrousFunction.
         if (!(callee instanceof FerrousFunction)) {
@@ -301,6 +299,8 @@ class Interpreter implements ExprVisitor, StmtVisitor {
         return func.call(this, args)
     }
 
+    // Define how to evaluate a Funct Node.
+    // Set the function name to corresponding Funct Object in the env.
     visitFunctStmt(stmt: Funct) {
         let fc: FerrousFunction = new FerrousFunction(stmt);
         this.env.define(stmt.name.lexeme, fc);
