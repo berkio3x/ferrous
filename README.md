@@ -114,7 +114,7 @@ var value = demo();
 print value; // null
 ```
 
-4. Closures.
+4. ##### Closures.
 ```C
 fun makeCounter() {
   var i = 0;
