@@ -1,0 +1,4 @@
+print 10 - 2; // expect: 8
+print 10 + 2; // expect: 12
+print 10 * 2; // expect: 20
+print 10 / 2; // expect: 5

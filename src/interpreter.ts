@@ -10,7 +10,6 @@ import { Funct } from './Stmt';
 import { RetrunException } from './ReturnException';
 
 
-
 class RuntimeError extends Error {
     token: Token;
     constructor(token: Token, message?: string) {
@@ -26,12 +25,10 @@ function runtimeError(error: RuntimeError) {
 }
 
 
-class Interpreter implements ExprVisitor,
-    StmtVisitor {
+class Interpreter implements ExprVisitor, StmtVisitor {
 
     globals: Environment = new Environment();
     env: Environment = this.globals;
-
 
     constructor() {
         this.globals.define("clock", new Clock())
@@ -80,7 +77,7 @@ class Interpreter implements ExprVisitor,
     }
 
     checkNumberOperand(operator: Token, operand: Object) {
-        if (typeof operator === "number") return;
+        if (typeof operand === "number") return;
         throw new RuntimeError(operator, `Operand must be a number`)
     }
 
@@ -280,11 +277,15 @@ class Interpreter implements ExprVisitor,
         expr.args.forEach((arg) => {
             args.push(this.evaluate(arg));
         })
+
         // TODO: might need to work on this , 
         // check instance compability with FerrousCallable instead of FerrousFunction.
-        if (!(callee instanceof FerrousFunction)) {
-            throw new RuntimeError(expr.paren, "Can only call functions and classes.")
-        }
+
+
+
+        // if (!(callee instanceof FerrousCallable)) {
+        //     throw new RuntimeError(expr.paren, "Can only call functions and classes.")
+        // }
 
 
         let func: FerrousCallable = <FerrousCallable>callee;
