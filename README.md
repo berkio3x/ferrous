@@ -18,6 +18,7 @@ Currently it tries to be a one to one port of `jlox` but I plan on adding additi
   * [syntax](#function)
   * [return values](#function-return-values)
   * [Implicit return value](#function-implicit-return-value)
+  * [Closures](#closures)
 - [Scopes](#scopes)     
 
 
@@ -111,6 +112,22 @@ fun calculate() {
 }
 var value = demo();
 print value; // null
+```
+
+4. Closures.
+```C
+fun makeCounter() {
+  var i = 0;
+  fun count() {
+    i = i + 1;
+    print i;
+  }
+  return count;
+}
+
+var counter = makeCounter();
+counter(); // "1".
+counter(); // "2".
 ```
 
 #### Scopes
