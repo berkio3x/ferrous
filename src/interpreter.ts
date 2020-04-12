@@ -81,6 +81,7 @@ class Interpreter implements ExprVisitor, StmtVisitor {
         throw new RuntimeError(operator, `Operand must be a number`)
     }
 
+
     checkNumberOperands(operator: Token, left: Object, right: Object) {
         if (typeof left === "number" && typeof right === "number") return;
         throw new RuntimeError(operator, `Operands must be a numbers `)
@@ -303,7 +304,7 @@ class Interpreter implements ExprVisitor, StmtVisitor {
     // Define how to evaluate a Funct Node.
     // Set the function name to corresponding Funct Object in the env.
     visitFunctStmt(stmt: Funct) {
-        let fc: FerrousFunction = new FerrousFunction(stmt);
+        let fc: FerrousFunction = new FerrousFunction(stmt, this.env);
         this.env.define(stmt.name.lexeme, fc);
         return null;
     }

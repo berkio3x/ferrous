@@ -1,19 +1,12 @@
-fun demo(x){
-    if (x < 5){
-        print true;
-        return 10;
-    }
-    else {
-        print false;
-        return 20;
-    }
-   
+fun makeCounter() {
+  var i = 0;
+  fun count() {
+    i = i + 1;
+    print i;
+  }
+  return count;
 }
 
-
-
-var a = demo(10);
-var b = demo(1);
-
-print a;
-print b;
+var counter = makeCounter();
+counter(); // "1".
+counter(); // "2".
